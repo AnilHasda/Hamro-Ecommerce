@@ -26,6 +26,11 @@ export let authSchema=new mongoose.Schema({
     data_0f_registration:{
         type:Date,
         default:Date.now()
+    },
+    isAdmin:{
+        type:Boolean,
+        required:true,
+        default:false
     }
 
 })
