@@ -10,6 +10,6 @@ export const isAdmin=async (req,resp,next)=>{
         resp.send("unauthorized access");
     }
     }else{
-        resp.send("please login to access")
+        resp.send("please login to access");
     }
 }

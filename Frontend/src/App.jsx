@@ -1,10 +1,10 @@
 import React from 'react'
-import Header from './components/Header'
+import RouterConfig from './Router/RouterConfig'
 const App = () => {
   return (
-      <>
-      <Header/>
-      </>
+      <div className='h-auto max-w-[1440px] m-auto'>
+<RouterConfig/>
+      </div>
   )
 }
 

@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import CookieParser from "cookie-parser";
 import router1 from "./Routes/productLIstingRoutes/routes.js"
 import router2 from "./Routes/authRoutes/authRoutes.js";
@@ -11,6 +12,10 @@ dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
  app.use(CookieParser());
+ app.use(cors({
+    origin:"http://localhost:5173",
+    credentials:true
+ }));
 const port=process.env.PORT || 5000;
 app.use(router1);
 app.use(router2)

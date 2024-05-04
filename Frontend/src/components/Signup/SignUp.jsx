@@ -1,0 +1,70 @@
+import React,{useState} from 'react'
+import { NavLink } from 'react-router-dom'
+import axios from "axios";
+// import { useDispatch } from 'react-redux';
+// import { updateLogged } from '../slices/Slices';
+const SignUp = () => {
+  let [fname,setFname]=useState("");
+  let [lname,setLname]=useState("");
+  let [email,setEmail]=useState("");
+  let [user,setUser]=useState("");
+  let [password,setPassword]=useState("");
+  let [cpassword,setCpassword]=useState("");
+  let [profile,setProfile]=useState();
+  // let dispatch=useDispatch();
+ async  function sendData(e){
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('fname', fname);
+    formData.append('lname', lname);
+    formData.append('email', email);
+    formData.append('user', user);
+    formData.append('password', password);
+    formData.append('cpassword', cpassword);
+    formData.append('profile', profile);
+// try{
+//   if(password===cpassword){
+// let response=await axios.post("http://localhost:3000/",formData,{
+//   withCredentials:true,
+//   headers: {
+//     "Content-Type": "multipart/form-data", // Ensure correct content type
+//   },
+// });
+// console.log(response.data)
+// alert(response.data.message);
+// if(response && response.data.userLogged===true){
+// dispatch(updateLogged());
+// }
+//   }
+//   else{
+//     alert("Password does not matched")
+//   }
+// }catch(error){
+//   console.log("error occurs while inserting data",error);
+// }
+  }
+  return (
+    <div className='h-auto w-full bg-[blueviolet] text-white py-10'>
+      <form className='m-auto w-[90%] md:w-[300px]'method="post"encType="multipart/form-data">
+        <div className=' text-xl mb-8 font-semibold'><h3>Signup Form</h3></div>
+        <label htmlFor='fname'className='font-semibold'>First-Name</label><br/>
+        <input type="text"placeholder="enter first-name"id="fname" className='h-[35px] pl-5 w-full  m-auto rounded-sm mb-4 mt-[5px] border-none outline-none text-black'onChange={e=>setFname(e.target.value)}required/><br/>
+        <label htmlFor='lname'className='font-semibold'>Last-Name</label><br/>
+        <input type="text"placeholder="enter last-name"id="lname" className='h-[35px] pl-5 w-full  m-auto rounded-sm mb-4 mt-[5px] border-none outline-none text-black'onChange={e=>setLname(e.target.value)}required/><br/>
+        <label htmlFor='email'className='font-semibold'>Email</label><br/>
+        <input type="email"placeholder="enter email"id="email" className='h-[35px] pl-5 w-full  m-auto rounded-sm mb-4 mt-[5px] border-none outline-none text-black'onChange={e=>setEmail(e.target.value)}required/><br/>
+        <label htmlFor='name'className='font-semibold'>User-Name</label><br/>
+        <input type="text"placeholder="enter user-name"id="name" className='h-[35px] pl-5 w-full  m-auto rounded-sm mb-4 mt-[5px] border-none outline-none text-black'onChange={e=>setUser(e.target.value)}required/><br/>
+        <label htmlFor='password'className='font-semibold'>Password</label><br/>
+        <input type="password"placeholder="enter password"id="password" className='h-[35px] pl-5 w-full m-auto rounded-sm mb-4 mt-[5px] border-none outline-none text-black'onChange={e=>setPassword(e.target.value)}required/><br/>
+        <label htmlFor='cpassword'className='font-semibold'>Confirm Password</label><br/>
+        <input type="password"placeholder="enter confirm-password"id="cpassword" className='h-[35px] pl-5 w-full m-auto rounded-sm mb-4 mt-[5px] border-none outline-none text-black'onChange={e=>setCpassword(e.target.value)}required/><br/>
+        <input type="file"name="profile"onChange={e=>setProfile(e.target.files[0])}/><br/>
+        <button type="submit"name="submit"className='h-[35px] w-full md:w-[120px] mt-5 bg-[#f1f1f1] text-black rounded-sm hover:bg-[#e6eaf0] transition duration-200'>submit</button>
+      </form>
+      <div className='m-auto w-[90%] md:w-[300px] mt-4'>already have account?<NavLink to="/login"><u>sign in</u></NavLink></div>
+    </div>
+  )
+}
+
+export default SignUp;
