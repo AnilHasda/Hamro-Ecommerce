@@ -22,26 +22,26 @@ const SignUp = () => {
     formData.append('password', password);
     formData.append('cpassword', cpassword);
     formData.append('profile', profile);
-// try{
-//   if(password===cpassword){
-// let response=await axios.post("http://localhost:3000/",formData,{
-//   withCredentials:true,
-//   headers: {
-//     "Content-Type": "multipart/form-data", // Ensure correct content type
-//   },
-// });
-// console.log(response.data)
-// alert(response.data.message);
-// if(response && response.data.userLogged===true){
-// dispatch(updateLogged());
-// }
-//   }
-//   else{
-//     alert("Password does not matched")
-//   }
-// }catch(error){
-//   console.log("error occurs while inserting data",error);
-// }
+try{
+  if(password===cpassword){
+let response=await axios.post("http://localhost:4000/auth/signup",formData,{
+  withCredentials:true,
+  headers: {
+    "Content-Type": "multipart/form-data", // Ensure correct content type
+  },
+});
+console.log(response.data)
+alert(response.data.message);
+if(response && response.data.userLogged===true){
+dispatch(updateLogged());
+}
+  }
+  else{
+    alert("Password does not matched")
+  }
+}catch(error){
+  console.log("error occurs while inserting data",error);
+}
   }
   return (
     <div className='h-auto w-full bg-[blueviolet] text-white py-10'>
