@@ -11,13 +11,14 @@ dotenv.config("../././.env");
 let SECRET_KEY=process.env.SECRET_KEY;
 //signup controller function starts from here
 const signUp = async (req, resp) => {
+  console.log(req.body)
   try {
     let query = new authModel(req.body);
     let result = await query.save();
     if(result){
       let token = tokenGenerator(req.body, SECRET_KEY);
       resp.cookie("token",token,{httpOnly:true});
-      resp.send("Your account has been created");
+      resp.status(200).json({message:"Your account has been created"});
     }
     else{
         resp.send("something went wrong! try again later");
