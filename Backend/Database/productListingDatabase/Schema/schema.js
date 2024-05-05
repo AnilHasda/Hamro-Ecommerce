@@ -1,16 +1,16 @@
+import { Timestamp } from "mongodb";
 import mongoose from "mongoose";
 export let schema=new mongoose.Schema({
     item:{
         type:String,
-        require:true,
+        required:true,
+    },
+    description:{
+        type:String,
+        required:true
     },
     price:{
         type:Number,
-        require:true,
+        required:true,
     },
-    date_of_order:{
-        type:Date,
-        require:true,
-        default:Date.now()
-    }
-})
+},{timestamps:true})

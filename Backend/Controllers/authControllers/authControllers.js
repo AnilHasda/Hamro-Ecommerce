@@ -4,14 +4,12 @@ import {
   duplicateErrorHandling,
 } from "../../schemaErrorHandling/errorHandling.js";
 import { tokenGenerator } from "../../tokenGenerator/tokenGenerator.js";
-import jwt from "jsonwebtoken";
 import bcrptjs from "bcryptjs";
 import dotenv from "dotenv";
 dotenv.config("../././.env");
 let SECRET_KEY=process.env.SECRET_KEY;
 //signup controller function starts from here
 const signUp = async (req, resp) => {
-  console.log(req.body)
   try {
     let query = new authModel(req.body);
     let result = await query.save();
@@ -36,7 +34,6 @@ const signUp = async (req, resp) => {
 export const login=async (req,resp)=>{
   try{
 let query = await authModel.find({user:req.body.user,});
-console.log(query)
 if(query.length>0){
   let checkPassword=await bcrptjs.compare(req.body.password,query[0].password);
   if(checkPassword){

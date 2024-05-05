@@ -1,7 +1,8 @@
 import {model} from "../../Database/productListingDatabase/Model/model.js";
 const getData=(req,resp)=>{
+
     resp.cookie("name","anil",{httpOnly:true})
-    resp.send("This is test message for nodejs");
+    resp.send("This is test message for nodejs"+req.user.user);
 }
 const insertData=async (req,resp)=>{
     console.log(req.body);

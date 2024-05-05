@@ -6,10 +6,11 @@ const isLoggin=(req,resp,next)=>{
     if(!token){
         resp.send("please loggin to continue");
     }
-    else{
+    else{                   
         try{
         let check=jwt.verify(token,process.env.SECRET_KEY);
         if(check){
+            req.user=check;
             next();
         }
         else{
