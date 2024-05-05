@@ -11,7 +11,7 @@ const insertData = async (req, resp) => {
   console.log(req.file);
   console.log(req.body);
   try {
-    let query = new model(req.body);
+    let query = new model({...req.body,item:req.file.path});
     await query.save();
     if (query) {
       resp.status(200).json({ message: "New item has been added" });
