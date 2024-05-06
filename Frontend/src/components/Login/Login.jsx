@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateLogged } from "../../Redux/Slices/Slices";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -8,6 +8,9 @@ const Login = () => {
   let [user, setUser] = useState("");
   let [password, setPassword] = useState("");
    let dispatch = useDispatch();
+   let logginStatus=useSelector(state=>state.isLogged.status);
+   let adminStatus=useSelector(state=>state.isAdmin.status);
+   console.log({logginStatus,adminStatus})
   const loginData = async (e) => {
     e.preventDefault();
     let data = { user, password };
@@ -15,13 +18,12 @@ const Login = () => {
       let response = await axios.post("http://localhost:4000/auth/login", data, {
         withCredentials: true,
       });
-      console.log(response.data)
       setUser("");
       setPassword("");
-      toast.success(response.data.message);
-      //alert(response.data.message);
-      if (response && response.data.userLogged === true) {
-        dispatch(updateLogged());
+      if (response.data.isLogged === true) {
+        toast.success(response.data.message);
+        dispatch(updateLogged({isLogged:response.data.isLogged,isAdmin:response.data.isAdmin}));
+        window.history.back();
       }
     } catch (error) {
    toast.error(error.response.data.message);
