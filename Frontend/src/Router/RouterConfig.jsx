@@ -6,6 +6,7 @@ import Profile from "../components/Profile";
 import Home from "../components/Home/Home";
 import Login from "../components/Login/Login";
 import SignUp from "../components/Signup/SignUp";
+import Admin from "../components/Admin/Admin";
 const RouterConfig = () => {
   return (
     <Router>
@@ -13,6 +14,7 @@ const RouterConfig = () => {
         <Route path="/" element={<Layout />}>
           <Route exact path="/" element={<Home />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="/admin" element={<Admin/>}/>
           <Route path="Login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
         </Route>

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 let initialState = {
   isLogged: { status: false },
+  isAdmin:{status:false}
 };
 let slice1 = createSlice({
   name: "test",

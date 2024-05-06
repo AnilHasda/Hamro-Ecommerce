@@ -4,7 +4,7 @@ import { IoCartOutline } from "react-icons/io5";
 import { IoMdMenu } from "react-icons/io";
 const Header = () => {
   return (
-    <nav className="h-[60px] w-full bg-[blueviolet] text-white flex justify-between items-center px-[10px] sm:px[30px] md:px-10">
+    <nav className="h-[60px] w-full bg-[blueviolet] text-white flex justify-between items-center px-[10px] sm:px[30px] md:px-10 mb-[1px]">
       <div className="flex gap-5"><IoCartOutline size={30}/><h3 className="text-xl font-semibold">E-commercer Site</h3></div>
       <IoMdMenu size={30} className="block md:hidden"/>
       <div className="hidden md:flex gap-5">
