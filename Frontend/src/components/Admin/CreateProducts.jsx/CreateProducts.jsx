@@ -52,7 +52,7 @@ const CreateProducts = () => {
     {adminStatus===true ?
     <div className="h-auto md:w-[60vw]  text-black  py-10 border-l-2">
       <form
-        className="m-auto w-[90%] md:w-[400px] lg:w-[600px]"
+        className="w-[90%] md:w-[400px] lg:w-[600px] m-auto"
         onSubmit={sentData}
         encType="multipart/form-data"
       >

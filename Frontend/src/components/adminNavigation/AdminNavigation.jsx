@@ -3,9 +3,9 @@ import { NavLink } from "react-router-dom";
 import {Button} from "@chakra-ui/react";
 const AdminNavigation = () => {
   return (
-    <div className="h-auto md:h-[100vh] pr-5 w-[95vw] mx-auto md:w-[30vw] pt-10">
+    <div className="h-auto md:h-[100vh] pr-5 w-[95vw] mx-auto md:w-[30vw] pt-10 pl-3">
         <h3 className="font-bold text-[25px] text-center mb-10">Admin Panel</h3>
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 justify-center w-full">
       <NavLink to="/admin">
         <Button colorScheme="orange" variant="solid"className="w-full">
           Create Products
