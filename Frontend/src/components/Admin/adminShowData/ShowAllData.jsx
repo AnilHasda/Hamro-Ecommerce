@@ -1,26 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import useGetData from "../../getData/getdata";
 import AdminNavigation from "../../adminNavigation/AdminNavigation";
 import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    useDisclosure,
-    FormControl,
-    FormLabel,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  FormControl,
+  FormLabel,
+  Textarea,
   Input,
-  Button
-  } from '@chakra-ui/react'
+  Button,
+} from "@chakra-ui/react";
 const ShowAllData = () => {
+    let [name,setName]=useState("");
+    let [description,setDescription]=useState("");
+    let [price,setPrice]=useState("");
+    let [image,setImage]=useState("");
   let response = useGetData();
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const initialRef = React.useRef(null)
-  const finalRef = React.useRef(null)
+  const initialRef = React.useRef(null);
+  const finalRef = React.useRef(null);
+  const handleModal=(ele)=>{
+    setName(ele.name);
+    setDescription(ele.description);
+    setPrice(ele.price);
+    onOpen();
+  }
   return (
     <div className="h-auto w-full flex flex-col md:flex-row lg:gap-[50px] pb-10 md:px-[20px] ">
       <AdminNavigation />
@@ -42,41 +53,47 @@ const ShowAllData = () => {
                   <p>{ele.name}</p>
                 </div>
                 <br />
-                <button className="h-[35px] w-[80px] bg-blue-600 text-white rounded-md mt-[15px]"onClick={onOpen}>
+                <button
+                  className="h-[35px] w-[80px] bg-blue-600 text-white rounded-md mt-[15px]"
+                  onClick={()=>{handleModal(ele)}}
+                >
                   Edit
                 </button>
                 {/*  update modal starts from here*/}
                 <Modal
-        initialFocusRef={initialRef}
-        finalFocusRef={finalRef}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create your account</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>First name</FormLabel>
-              <Input ref={initialRef} placeholder='First name' />
-            </FormControl>
+                  initialFocusRef={initialRef}
+                  finalFocusRef={finalRef}
+                  isOpen={isOpen}
+                  onClose={onClose}
+                >
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Update product items</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody pb={6}>
+                      <FormControl>
+                        <FormLabel>Name:</FormLabel>
+                        <Input type="text"value={name} onChange={e=>{setName(e.target.value)}}/>
+                      </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>Last name</FormLabel>
-              <Input placeholder='Last name' />
-            </FormControl>
-          </ModalBody>
+                      <FormControl mt={4}>
+                        <FormLabel>Description:</FormLabel>
+                        <Textarea value={description} onChange={e=>{setDescription(e.target.value)}}className="resize-none" />
+                      </FormControl>
+                      <FormControl mt={4}>
+                        <FormLabel>Price:</FormLabel>
+                        <Input type="number"value={price} onChange={e=>{setPrice(e.target.value)}}/>
+                      </FormControl>
+                    </ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3}>
-              Save
-            </Button>
-            <Button onClick={onClose}>Cancel</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
+                    <ModalFooter>
+                      <Button colorScheme="blue" mr={3}>
+                        Update
+                      </Button>
+                      <Button onClick={onClose}>Cancel</Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
 
                 {/* update modal end here */}
                 <button className="h-[35px] w-[80px] bg-red-600 text-white ml-4 rounded-md mt-[15px]">
