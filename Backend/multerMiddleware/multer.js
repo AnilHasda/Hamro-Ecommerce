@@ -1,10 +1,14 @@
 import multer from "multer";
 let storage=multer.diskStorage({
     destination:function (req,file,cb){
+      if(req.file){
     cb(null,"./productImages");
+      }
     },
     filename:function (req,file,cb){
+      if(req.file){
         cb(null,Date.now()+"-"+file.originalname);
+      }
     }
 })
 const imageFilter = function (req, file, cb) {
