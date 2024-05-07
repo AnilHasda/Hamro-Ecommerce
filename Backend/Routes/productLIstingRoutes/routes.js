@@ -4,6 +4,9 @@ import { getData,insertData } from "../../Controllers/productControllers/product
 import { isLoggin } from "../../isLoggin/isLoggin.js";
 import { isAdmin } from "../../isAdmin/isAdmin.js";
 import { data } from "../../multerMiddleware/multer.js";
+import { deleteData, updateData } from "../../Controllers/productCRUDControllers/crudControllers.js";
 router.get("/product/getData",getData);
 router.post("/product/insertData",data,insertData);
+router.get("/product/deleteData/:id",deleteData);
+router.post("product/updateData",updateData);
 export default router;
