@@ -70,6 +70,7 @@ toast.error(error.responseData.data.message);
     });
     if(responseData){
       toast.success(responseData.data.message);
+      onClose();
     }else{
       toast.error("something went wrong");
     }
@@ -156,7 +157,7 @@ toast.error(error.responseData.data.message);
           return (
             <div
               key={ele._id}
-              className="h-[350px] pb-5 py-[20px] w-[98%] md:w-[30%] m-auto md:m-0 lg:w-[300px] bg-[#f1f1f1] text-center rounded-md"
+              className="h-[370px] shadow-md pb-5 py-[20px] w-[98%] md:w-[30%] m-auto md:m-0 lg:w-[300px] bg-[#f1f1f1] text-center rounded-md"
             >
               <img
                 src={`http://localhost:4000/${ele.item}`}
@@ -164,13 +165,13 @@ toast.error(error.responseData.data.message);
                 className="w-full mb-4"
               />
               <div>
-                <div className="flex justify-center">
-                  <p className="font-bold text-md">Item:</p>
+                <div className="text-center border-t-2 py-1">
                   <p>{ele.name}</p>
+                  <p className="text-sm py-2">{ele.description.length>20 ? ele.description.substring(0,30)+"...":ele.description}</p>
+                  <p className="text-[#ff5900be] pb-2">${ele.price}</p>
                 </div>
-                <br />
                 <button
-                  className="h-[35px] w-[80px] bg-blue-600 text-white rounded-md mt-[15px]"
+                  className="h-[35px] w-[80px] bg-blue-600 text-white rounded-md text-sm"
                   onClick={() => {
                     handleModal(ele);
                     setImage(null)
@@ -179,7 +180,7 @@ toast.error(error.responseData.data.message);
                   Edit
                 </button>
                
-                <button className="h-[35px] w-[80px] bg-red-600 text-white ml-4 rounded-md mt-[15px]"onClick={()=>{deleteData(ele._id)}}>
+                <button className="h-[35px] w-[80px] bg-red-600 text-white text-sm ml-4 rounded-md"onClick={()=>{deleteData(ele._id)}}>
                   Delete
                 </button>
               </div>
