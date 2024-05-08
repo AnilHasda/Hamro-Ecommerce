@@ -1,9 +1,23 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateLogged } from "../../Redux/Slices/Slices";
 import toast from "react-hot-toast";
 import axios from "axios";
+// import {
+//   Modal,
+//   ModalOverlay,
+//   ModalContent,
+//   ModalHeader,
+//   ModalFooter,
+//   ModalBody,
+//   ModalCloseButton,
+//   useDisclosure,
+//   Button,
+//   FormControl,
+//   FormLabel,
+//   Input
+// } from '@chakra-ui/react';
 const Login = () => {
   let [user, setUser] = useState("");
   let [password, setPassword] = useState("");
@@ -86,5 +100,46 @@ const Login = () => {
     </div>
   );
 };
+// const Login=()=>{
+//   const { isOpen, onOpen, onClose } = useDisclosure()
+
+//   const initialRef = React.useRef(null)
+//   const finalRef = React.useRef(null)
+//   return (
+//     <>
+
+//       <Modal
+//         initialFocusRef={initialRef}
+//         finalFocusRef={finalRef}
+//         isOpen={isOpen}
+//         onClose={onClose}
+//       >
+//         <ModalOverlay />
+//         <ModalContent>
+//           <ModalHeader>Create your account</ModalHeader>
+//           <ModalCloseButton />
+//           <ModalBody pb={6}>
+//             <FormControl>
+//               <FormLabel>First name</FormLabel>
+//               <Input ref={initialRef} placeholder='First name' />
+//             </FormControl>
+
+//             <FormControl mt={4}>
+//               <FormLabel>Last name</FormLabel>
+//               <Input placeholder='Last name' />
+//             </FormControl>
+//           </ModalBody>
+
+//           <ModalFooter>
+//             <Button colorScheme='blue' mr={3}>
+//               Save
+//             </Button>
+//             <Button onClick={onClose}>Cancel</Button>
+//           </ModalFooter>
+//         </ModalContent>
+//       </Modal>
+//     </>
+//   )
+// }
 
 export default Login;

@@ -1,17 +1,18 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-const useGetData =() => {
-    let [data,setData]=useState([]);
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getData } from "../../Redux/Slices/Slices";
+const GetData =() => {
+    let dispatch=useDispatch();
   useEffect(() => {
     (async () => {
       try {
         let response = await axios.get("http://localhost:4000/product/getData");
-        setData(response.data)
+dispatch(getData(response.data));
       } catch (error) {
         console.log(error);
       }
     })();
   },[]);
-  return data;
 };
-export default useGetData;
+export default GetData;

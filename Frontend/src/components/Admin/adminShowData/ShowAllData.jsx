@@ -1,8 +1,9 @@
 import React, { useState,useEffect } from "react";
 import axios from "axios";
-import useGetData from "../../getData/getdata";
+import GetData from "../../getData/getdata";
 import AdminNavigation from "../../adminNavigation/AdminNavigation";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import {
   Modal,
   ModalOverlay,
@@ -17,6 +18,7 @@ import {
   Textarea,
   Input,
   Button,
+  Spinner
 } from "@chakra-ui/react";
 const ShowAllData = () => {
   let [name, setName] = useState("");
@@ -25,11 +27,8 @@ const ShowAllData = () => {
   let [image, setImage] = useState(null);
   let [previewImage,setPreviewImage]=useState("");
   let [category,setCategory]=useState("");
-  let [dummy,setDummy]=useState(false);
   let [id,setId]=useState("");
-  let [x,setX]=useState(0)
-let response=useGetData();
-  console.log({dummy,x});
+let response=useSelector(state=>state.responseData);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
@@ -48,6 +47,7 @@ let response=useGetData();
 let responseData=await axios.delete("http://localhost:4000/product/deleteData/"+id);
 if(responseData){
   toast.success(responseData.data.message);
+  GetData();
 }
     }catch(error){
 toast.error(error.responseData.data.message);
@@ -69,6 +69,7 @@ toast.error(error.responseData.data.message);
       },
     });
     if(responseData){
+      GetData();
       toast.success(responseData.data.message);
       onClose();
     }else{
@@ -80,9 +81,9 @@ toast.error(error.responseData.data.message);
   }
   }
   return (
-    <div className="h-auto w-full flex flex-col md:flex-row lg:gap-[50px] pb-10 md:px-[20px] ">
+    <div className="h-auto w-full flex flex-col md:flex-row lg:gap-[50px] md:px-[20px] ">
       <AdminNavigation />
-      <div className="h-auto w-full flex flex-wrap gap-5 mt-10">
+      <div className="showAll overflow-y-scroll md:px-4 md:justify-center lg:justify-normal lg:px-0 w-full flex flex-wrap gap-5 py-10">
          {/*  update modal starts from here*/}
          <Modal
                   initialFocusRef={initialRef}
@@ -117,7 +118,7 @@ toast.error(error.responseData.data.message);
                             setImage(e.target.files[0]);
                           }}
                         />
-                        <img src={!image?`http://localhost:4000/${previewImage}`:URL.createObjectURL(image)} alt={name} className="w-full"/>
+                        <img src={!image?`http://localhost:4000/${previewImage}`:URL.createObjectURL(image)} alt={name} className="h-[150px] m-auto mt-3"/>
                       </FormControl>
 
                       <FormControl mt={4}>
@@ -153,16 +154,16 @@ toast.error(error.responseData.data.message);
                 </Modal>
 
                 {/* update modal end here */}
-        {response.map((ele) => {
+        {response.length>0?response.map((ele) => {
           return (
             <div
               key={ele._id}
-              className="h-[370px] shadow-md pb-5 py-[20px] w-[98%] md:w-[30%] m-auto md:m-0 lg:w-[300px] bg-[#f1f1f1] text-center rounded-md"
+              className="h-auto shadow-md pb-5 py-[20px] w-[98%]  m-auto md:m-0 lg:w-[300px] xl-w-[300px] bg-[#f1f1f1] text-center rounded-md"
             >
               <img
                 src={`http://localhost:4000/${ele.item}`}
                 alt={ele.name}
-                className="w-full mb-4"
+                className="h-[150px] m-auto mb-4"
               />
               <div>
                 <div className="text-center border-t-2 py-1">
@@ -186,7 +187,9 @@ toast.error(error.responseData.data.message);
               </div>
             </div>
           );
-        })}
+        })
+      :<div className="relative left-[50%] top-[50%]"><Spinner/></div>
+      }
       </div>
     </div>
   );
