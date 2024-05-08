@@ -26,4 +26,17 @@ const insertData = async (req, resp) => {
     }
   }
 };
-export { getData, insertData };
+const filterCategory=async (req,resp)=>{
+console.log(req.body);
+try{
+let query=await model.find({category:req.body.category});
+if(query){
+  resp.send(query);
+}else{
+  resp.status(500).json({message:"something went wrong"});
+}
+}catch(error){
+  resp.status(500).json({message:"Internal server error"});
+}
+}
+export { getData, insertData,filterCategory };
