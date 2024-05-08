@@ -3,13 +3,23 @@ import { Spinner } from "@chakra-ui/react";
 import GetData from "../getData/getdata";
 import { useDispatch,useSelector } from 'react-redux'
 import { Select } from "@chakra-ui/react";
+import { getData } from "../../Redux/Slices/Slices";
+import axios from "axios";
 const Home = () => {
   let [quantity, setQunatity] = useState(1);
   let response =useSelector(state=>state.responseData);
+  let dispatch=useDispatch();
   let category=useSelector(state=>state.category);
-//   useEffect(()=>{
-// GetData();
-//   },[])
+  //calling api to get all the data from database
+  GetData();
+    const filter=async (filterItem)=>{
+      try{
+      let filterData=await axios.post("http://localhost:4000/product/filterCategory",{selectCategory:filterItem});
+      dispatch(getData(filterData.data));
+      }catch(error){
+        console.log(error)
+      }
+      }
   return (
     <>
       {/* right section */}
@@ -18,7 +28,7 @@ const Home = () => {
           <div className="order-2 sm:order-1">Sort By price<input type="number"min={1} max={5000} className=" border ml-2 border-gray-300 pl-2 outline-none rounded-md"/></div>
           <h3 className="order-1 sm:order-2 font-bold text-lg text-center pt-5">OUR PRODUCTS</h3>
           <div className="order-3">
-            <Select placeholder="Select Category">
+            <Select placeholder="Select Category"onChange={(e)=>{filter(e.target.value)}}>
             {category.map((ele,index)=>{
               return <option key={index} value={ele.option}>{ele.option}</option>
             })}
