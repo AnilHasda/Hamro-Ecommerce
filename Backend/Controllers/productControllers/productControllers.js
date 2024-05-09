@@ -26,17 +26,35 @@ const insertData = async (req, resp) => {
     }
   }
 };
+//controller for filter by category
 const filterCategory=async (req,resp)=>{
 console.log(req.body);
 try{
-let query=await model.find({category:req.body.category});
+let query=await model.find({category:req.body.selectCategory});
 if(query){
+  console.log(req.body);
   resp.send(query);
-}else{
+}
+else{
   resp.status(500).json({message:"something went wrong"});
 }
 }catch(error){
   resp.status(500).json({message:"Internal server error"});
 }
 }
-export { getData, insertData,filterCategory };
+//controller for filter by price
+const filterByPrice=async (req,resp)=>{
+  console.log(req.body);
+  try{
+  let query=await model.find({price:{$gte:Number(req.body.lowerPrice),$lte:Number(req.body.higherPrice)}});
+  if(query){
+    resp.status(200).json(query);
+  }else{
+    resp.status(500).json({message:"something went wrong"});
+  }
+  }catch(error){
+    console.log(error);
+    resp.status(500).json({message:error});
+  }
+}
+export { getData, insertData,filterCategory,filterByPrice };
