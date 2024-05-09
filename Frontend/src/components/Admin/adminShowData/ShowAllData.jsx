@@ -28,6 +28,7 @@ const ShowAllData = () => {
   let [previewImage,setPreviewImage]=useState("");
   let [category,setCategory]=useState("");
   let [id,setId]=useState("");
+  let fetchData=GetData();
 let response=useSelector(state=>state.responseData);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
@@ -47,7 +48,7 @@ let response=useSelector(state=>state.responseData);
 let responseData=await axios.delete("http://localhost:4000/product/deleteData/"+id);
 if(responseData){
   toast.success(responseData.data.message);
-  GetData();
+ await fetchData();
 }
     }catch(error){
 toast.error(error.responseData.data.message);
@@ -69,7 +70,7 @@ toast.error(error.responseData.data.message);
       },
     });
     if(responseData){
-      GetData();
+      await fetchData();
       toast.success(responseData.data.message);
       onClose();
     }else{

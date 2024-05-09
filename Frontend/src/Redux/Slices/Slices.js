@@ -9,6 +9,17 @@ let initialState = {
     {"option":"clothes"},
     {"option":"mobiles"},
     {"option":"others"},
+  ],
+  priceRange:[
+    {"price":"1-100"},
+    {"price":"100-200"},
+    {"price":"200-300"},
+    {"price":"300-400"},
+    {"price":"400-500"},
+    {"price":"500-600"},
+    {"price":"700-800"},
+    {"price":"800-900"},
+    {"price":"900-1000"},
   ]
 };
 

@@ -7,15 +7,20 @@ import { getData } from "../../Redux/Slices/Slices";
 import axios from "axios";
 const Home = () => {
   let [quantity, setQunatity] = useState(1);
+  let [heading,setHeading]=useState("OUR PRODUCTS");
   let response =useSelector(state=>state.responseData);
   let dispatch=useDispatch();
   let category=useSelector(state=>state.category);
+  let priceSort=useSelector(state=>state.priceRange)
   //calling api to get all the data from database
   GetData();
-    const filter=async (filterItem)=>{
+  console.log("i am called")
+    const filter=async (url,filterItem)=>{
+      console.log(filterItem)
       try{
-      let filterData=await axios.post("http://localhost:4000/product/filterCategory",{selectCategory:filterItem});
+      let filterData=await axios.post(url,filterItem);
       dispatch(getData(filterData.data));
+      setHeading("search result for:"+filterItem);
       }catch(error){
         console.log(error)
       }
@@ -25,10 +30,16 @@ const Home = () => {
       {/* right section */}
       <div>
         <div className="h-[150px] sm:h-[100px] gap-5 sm:gap-0 sm:px-[20px] md:px-[50px] items-center w-full flex flex-col sm:flex-row justify-between">
-          <div className="order-2 sm:order-1">Sort By price<input type="number"min={1} max={5000} className=" border ml-2 border-gray-300 pl-2 outline-none rounded-md"/></div>
-          <h3 className="order-1 sm:order-2 font-bold text-lg text-center pt-5">OUR PRODUCTS</h3>
-          <div className="order-3">
-            <Select placeholder="Select Category"onChange={(e)=>{filter(e.target.value)}}>
+          <div className="order-2 sm:order-1">
+            <Select placeholder="Sort by Price"onChange={(e)=>{let priceValue=(e.target.value).split("-");filter("http://localhost:4000/product/filterPrice",{lowerPrice:priceValue[0],higherPrice:priceValue[1]})}}>
+            {priceSort.map((ele,index)=>{
+              return <option key={index} value={ele.price}>{ele.price}</option>
+            })}
+            </Select>
+          </div>
+          <h3 className="order-1 sm:order-2 font-bold text-lg text-center pt-5">{heading}</h3>
+          <div className="order-3 flex gap-4">
+            <Select placeholder="Sort by Category"onChange={(e)=>{filter("http://localhost:4000/product/filterCategory",{"selectCategory":e.target.value})}}>
             {category.map((ele,index)=>{
               return <option key={index} value={ele.option}>{ele.option}</option>
             })}
