@@ -102,7 +102,7 @@ const Home = () => {
                 .map((ele, index) => {
                   return (
                     <div key={ele._id}>
-                      <div className="h-auto py-[20px]  w-[98%] sm:w-[40%] md:w-[30%] lg:w-[300px] bg-[#f1f1f1] shadow-md text-center rounded-md">
+                      <div className="h-auto py-[20px] w-[98vw] sm:w-[250px] lg:w-[300px] bg-[#f1f1f1] shadow-md text-center rounded-md">
                         <img
                           src={`http://localhost:4000/${ele.item}`}
                           alt={ele.name}
@@ -139,7 +139,7 @@ const Home = () => {
                           <button className="px-3 py-[5px] text-sm bg-blue-600 text-white rounded-md mt-[15px]">
                             See detail
                           </button>
-                          <button className="px-3 py-[5px] text-sm bg-red-600 text-white ml-4 rounded-md mt-[15px]">
+                          <button className="px-3 py-[5px] text-sm bg-red-600 text-white ml-4 rounded-md mt-[15px]"onClick={()=>{dispatch(updateCart(1))}}>
                             Add to cart
                           </button>
                         </div>
@@ -206,7 +206,7 @@ const Home = () => {
         )}
       </div>
       {response.length > maxNumber && (
-        <div className="h-auto py-5 w-[90vw] m-auto flex gap-5">
+        <div className="h-auto py-5 w-[80vw] m-auto flex gap-5">
           {pageNumber > 1 && (
             <button
               className="h-10 w-[80px] bg-[#edebeb] shadow-md"

@@ -48,5 +48,5 @@ state.responseData=action.payload;
     }
   },
 });
-export let {getData,updateLogged,logOut,loadingStatus}=slice1.actions;
+export let {getData,updateLogged,logOut,loadingStatus,updateCart}=slice1.actions;
 export default slice1.reducer;
