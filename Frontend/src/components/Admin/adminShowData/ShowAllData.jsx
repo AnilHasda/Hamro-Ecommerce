@@ -3,7 +3,7 @@ import axios from "axios";
 import GetData from "../../getData/getdata";
 import AdminNavigation from "../../adminNavigation/AdminNavigation";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import {
   Modal,
   ModalOverlay,
@@ -28,8 +28,10 @@ const ShowAllData = () => {
   let [previewImage,setPreviewImage]=useState("");
   let [category,setCategory]=useState("");
   let [id,setId]=useState("");
-  let fetchData=GetData();
 let response=useSelector(state=>state.responseData);
+let isLoading=useSelector(state=>state.isLoading.status);
+console.log(isLoading)
+let fetchData=GetData();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
@@ -189,7 +191,7 @@ toast.error(error.responseData.data.message);
             </div>
           );
         })
-      :<div className="relative left-[50%] top-[50%]"><Spinner/></div>
+      :<div className="relative left-[50%] top-[50%]">{isLoading===true?<Spinner/>:<p>No such data found</p>}</div>
       }
       </div>
     </div>

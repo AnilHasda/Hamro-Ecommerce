@@ -20,7 +20,9 @@ let initialState = {
     {"price":"700-800"},
     {"price":"800-900"},
     {"price":"900-1000"},
-  ]
+  ],
+  isLoading:{status:false},
+  cartItem:{total:0}
 };
 
 let slice1 = createSlice({
@@ -38,7 +40,13 @@ state.responseData=action.payload;
       state.isLogged.status=false;
       state.isAdmin.status=false;
     },
+    loadingStatus:(state,action)=>{
+      state.isLoading.status=action.payload;
+    },
+    updateCart:(state,action)=>{
+      state.cartItem.total+=action.payload;
+    }
   },
 });
-export let {getData,updateLogged,logOut}=slice1.actions;
+export let {getData,updateLogged,logOut,loadingStatus}=slice1.actions;
 export default slice1.reducer;
