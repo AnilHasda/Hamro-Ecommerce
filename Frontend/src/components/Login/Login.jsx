@@ -73,7 +73,7 @@ const Login=()=>{
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <SignUp/>
+            <div><SignUp/></div>
             <Button type="submit" colorScheme='blue' mr={3}>
               Login
             </Button>
