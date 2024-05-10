@@ -2,7 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 let initialState = {
   isLogged: { status: false },
   isAdmin:{status:false},
+  //this variable store the response data coming from database
   responseData:[],
+  //instance of responseData for search operation
+  filterResponseData:[],
   category:[
     {"option":"watch"},
     {"option":"shoes"},
@@ -32,6 +35,9 @@ let slice1 = createSlice({
     getData:(state,action)=>{
 state.responseData=action.payload;
     },
+    filterData:(state,action)=>{
+      state.filterResponseData=action.payload;
+          },
     updateLogged: (state, action) => {
       state.isLogged.status=action.payload.isLogged;
       state.isAdmin.status=action.payload.isAdmin;
@@ -48,5 +54,5 @@ state.responseData=action.payload;
     }
   },
 });
-export let {getData,updateLogged,logOut,loadingStatus,updateCart}=slice1.actions;
+export let {getData,updateLogged,logOut,loadingStatus,updateCart,filterData}=slice1.actions;
 export default slice1.reducer;

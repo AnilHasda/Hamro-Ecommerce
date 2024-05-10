@@ -4,19 +4,23 @@ import { IoCartOutline } from "react-icons/io5";
 import { IoMdMenu } from "react-icons/io";
 import { BsCartPlus } from "react-icons/bs";
 import { IoMdSearch } from "react-icons/io";
-import { useDisclosure } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import Login from "../Login/Login";
-import {
-  InputGroup,
-  Input,
-  InputRightElement,
-} from "@chakra-ui/react";
+import SignUp from "../Signup/SignUp";
+import { InputGroup, Input, InputRightElement } from "@chakra-ui/react";
+import { getData } from "../../Redux/Slices/Slices";
 const Header = () => {
   let location = useLocation();
-  let {onOpen}=useDisclosure();
-  let path = location.pathname === "/";
-  let totalCart=useSelector(state=>state.cartItem.total);
+  let path = location.pathname === "/" || location.pathname==="/Admin/showAllData";
+  let totalCart = useSelector((state) => state.cartItem.total);
+  let productItems=useSelector(state=>state.filterResponseData);
+let dispatch=useDispatch();
+  //
+  const searchFunction=(key)=>{
+    let filterData=productItems.filter(ele=>ele.name.includes(key) || ele.category.includes(key));
+    console.log(filterData)
+    dispatch(getData(filterData));
+  }
   return (
     <div className="h-[80px] w-full bg-[rgb(242,117,64)] opacity-100 z-10 sticky top-0 left-0 text-white flex justify-between items-center px-[10px] sm:px[30px] md:px-10 mb-[1px]">
       <div className="flex gap-5">
@@ -39,6 +43,7 @@ const Header = () => {
             focusBorderColor="gray.400"
             border={2}
             fontSize={14}
+            onChange={(e)=>{searchFunction(e.target.value)}}
           />
           <InputRightElement width="4.5rem">
             <IoMdSearch size={20} color="gray" />
@@ -48,14 +53,15 @@ const Header = () => {
       {/* input chakra component end here*/}
       <IoMdMenu size={30} className="block md:hidden" />
       <div className="hidden md:flex gap-5">
-        <NavLink to="/">Home</NavLink>
+        <NavLink to="/"onClick={()=>{location.reload()}}>Home</NavLink>
         <NavLink to="/Profile">Profile</NavLink>
         <NavLink to="/Admin">Admin</NavLink>
-<Login/>
+        <Login />
+        <SignUp/>
         <NavLink to="#" className="relative">
           <BsCartPlus size={30} className="" />
           <div className="absolute h-5 w-5 rounded-full bg-white top-[-15px] left-4 grid place-content-center text-[rgb(255,106,0)] text-sm">
-         {totalCart}
+            {totalCart}
           </div>
         </NavLink>
       </div>

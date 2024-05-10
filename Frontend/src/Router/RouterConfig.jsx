@@ -15,7 +15,7 @@ const RouterConfig = () => {
         <Route path="/" element={<Layout />}>
           <Route exact path="/" element={<Home />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="admin" element={<Outlet />}>
+          <Route path="Admin" element={<Outlet />}>
             {/* Render the child routes inside Outlet */}
             <Route index element={<Admin/>} />
             <Route path="showAllData" element={<ShowAllData />} end/>

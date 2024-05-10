@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateLogged } from "../../Redux/Slices/Slices";
 import toast from "react-hot-toast";
-import SignUp from "../Signup/SignUp";
 import axios from "axios";
 import {
   Modal,
@@ -73,7 +72,6 @@ const Login=()=>{
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <div><SignUp/></div>
             <Button type="submit" colorScheme='blue' mr={3}>
               Login
             </Button>

@@ -9,6 +9,8 @@ const Home = () => {
   let [quantity, setQunatity] = useState(1);
   let [heading, setHeading] = useState("OUR PRODUCTS");
   let [pageNumber, setPageNumber] = useState(1);
+  let filterdatas={category:"",price:""};
+  let [selectCategory,setSelectCategory]=useState();
   let response = useSelector((state) => state.responseData);
   let dispatch = useDispatch();
   let isLoading = useSelector((state) => state.isLoading.status);
@@ -17,21 +19,15 @@ const Home = () => {
   let maxNumber = 8;
   GetData();
   //calling api to get all the data from database
-  const createPagination = () => {
-    for (let i = 0; i < Math.random(response.length / maxNumber); i++) {
-      let button = document.createElement("button");
-      button.innerHTML = i + 1;
-    }
-  };
-  const filter = async (route, filterItem, searchResult) => {
+  const filter = async () => {
     try {
       dispatch(loadingStatus(true));
       let filterData = await axios.post(
-        "http://localhost:4000" + route,
-        filterItem
+        "http://localhost:4000/product/filterCategory",
+        filterdatas
       );
       dispatch(getData(filterData.data));
-      setHeading("search result for:" + searchResult);
+      setHeading("search result for:");
     } catch (error) {
       console.log(error);
     } finally {
@@ -50,11 +46,8 @@ const Home = () => {
               placeholder="Sort by Price"
               onChange={(e) => {
                 let priceValue = e.target.value.split("-");
-                filter(
-                  "/product/filterPrice",
-                  { lowerPrice: priceValue[0], higherPrice: priceValue[1] },
-                  e.target.value
-                );
+                filterdatas={...filterdatas,price:priceValue};
+                filter();
               }}
             >
               {priceSort.map((ele, index) => {
@@ -73,11 +66,8 @@ const Home = () => {
             <Select
               placeholder="Sort by Category"
               onChange={(e) => {
-                filter(
-                  "/product/filterCategory",
-                  { selectCategory: e.target.value },
-                  e.target.value
-                );
+                filterdatas={...filterdatas,category:e.target.value}
+                filter();
               }}
             >
               {category.map((ele, index) => {

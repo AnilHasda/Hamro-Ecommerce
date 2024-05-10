@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getData,loadingStatus} from "../../Redux/Slices/Slices";
+import { getData,loadingStatus,filterData} from "../../Redux/Slices/Slices";
 const GetData = () => {
   let dispatch = useDispatch();
   const fetchData = async () => {
@@ -9,6 +9,7 @@ const GetData = () => {
       dispatch(loadingStatus(true));
       let response = await axios.get("http://localhost:4000/product/getData");
       dispatch(getData(response.data));
+      dispatch(filterData(response.data))
     } catch (error) {
       console.log(error);
     }finally{

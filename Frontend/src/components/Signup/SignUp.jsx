@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { updateLogged } from "../../Redux/Slices/Slices.js";
+import toast from "react-hot-toast";
 import {
   Modal,
   ModalOverlay,
@@ -39,15 +40,16 @@ const SignUp = () => {
           }
         );
         console.log(response.data);
-        alert(response.data.message);
         if (response && response.data.userLogged === true) {
           dispatch(updateLogged());
+          toast.success(response.data.message);
+          onClose();
         }
       } else {
-        alert("Password does not matched");
+        toast.error("Password does not matched");
       }
     } catch (error) {
-      console.log("error occurs while inserting data", error);
+      toast.error(error.response.data.message);
     }
   }
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -55,7 +57,7 @@ const SignUp = () => {
   const finalRef = React.useRef(null);
   return (
     <>
-      <Button onClick={onOpen} mr={10}>Sign up</Button>
+      <NavLink to="#" onClick={onOpen} mr={10}>Sign up</NavLink>
       <Modal
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}
@@ -64,7 +66,7 @@ const SignUp = () => {
       >
         <ModalOverlay />
         <ModalContent>
-          <form onSubmit={(e)=>{sendData();e.stopPropagation()}}>
+          <form onSubmit={sendData}>
             <ModalHeader>Log-in Form</ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={6}>
