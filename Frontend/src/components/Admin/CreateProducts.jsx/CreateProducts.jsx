@@ -62,7 +62,7 @@ const CreateProducts = () => {
             encType="multipart/form-data"
           >
             <div className=" text-xl mb-8 font-semibold">
-              <h3>Add product-items</h3>
+              <h3 className="text-center md:text-left">Add product-items</h3>
             </div>
             <input
               type="file"

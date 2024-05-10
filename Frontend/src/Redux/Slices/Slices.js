@@ -51,6 +51,9 @@ state.responseData=action.payload;
     },
     updateCart:(state,action)=>{
       state.cartItem.total+=action.payload;
+    },
+    updateCategory:(state,action)=>{
+      state.category=[...state.category,{option:action.payload}];
     }
   },
 });

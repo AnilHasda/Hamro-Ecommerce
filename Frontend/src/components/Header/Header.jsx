@@ -33,8 +33,9 @@ let dispatch=useDispatch();
       {path && (
         <InputGroup
           bg="#fff"
-          w={{ base: "60vw", md: "50vw", lg: "40vw" }}
+          w={{ base: "60vw", md: "40vw", lg: "35vw" }}
           textColor="#000"
+          px="10px"
           className="rounded-md searchBar"
         >
           <Input
@@ -51,8 +52,8 @@ let dispatch=useDispatch();
         </InputGroup>
       )}
       {/* input chakra component end here*/}
-      <IoMdMenu size={30} className="block md:hidden" />
-      <div className="hidden md:flex gap-5">
+      <IoMdMenu size={30} className="block lg:hidden" />
+      <div className="hidden lg:flex gap-5">
         <NavLink to="/"onClick={()=>{location.reload()}}>Home</NavLink>
         <NavLink to="/Profile">Profile</NavLink>
         <NavLink to="/Admin">Admin</NavLink>

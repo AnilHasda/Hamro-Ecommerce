@@ -8,6 +8,7 @@ import Login from "../components/Login/Login";
 import SignUp from "../components/Signup/SignUp";
 import Admin from "../components/Admin/Admin";
 import ShowAllData from "../components/Admin/adminShowData/ShowAllData";
+import CreateCategory from "../components/Admin/createCategory/CreateCategory";
 const RouterConfig = () => {
   return (
     <Router>
@@ -18,7 +19,8 @@ const RouterConfig = () => {
           <Route path="Admin" element={<Outlet />}>
             {/* Render the child routes inside Outlet */}
             <Route index element={<Admin/>} />
-            <Route path="showAllData" element={<ShowAllData />} end/>
+            <Route path="showAllData" element={<ShowAllData />}/>
+            <Route path="createCategory"element={<CreateCategory/>}/>
           </Route>
           <Route path="Login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />

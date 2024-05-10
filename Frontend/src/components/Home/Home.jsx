@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import { Spinner } from "@chakra-ui/react";
 import GetData from "../getData/getdata";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,8 +9,8 @@ const Home = () => {
   let [quantity, setQunatity] = useState(1);
   let [heading, setHeading] = useState("OUR PRODUCTS");
   let [pageNumber, setPageNumber] = useState(1);
-  let filterdatas={category:"",price:""};
-  let [selectCategory,setSelectCategory]=useState();
+  let [selectPrice,setSelectPrice]=useState("");
+  let [selectCategory,setSelectCategory]=useState("");
   let response = useSelector((state) => state.responseData);
   let dispatch = useDispatch();
   let isLoading = useSelector((state) => state.isLoading.status);
@@ -19,23 +19,31 @@ const Home = () => {
   let maxNumber = 8;
   GetData();
   //calling api to get all the data from database
-  const filter = async () => {
+  const filter = async (filterItem) => {
     try {
       dispatch(loadingStatus(true));
       let filterData = await axios.post(
         "http://localhost:4000/product/filterCategory",
-        filterdatas
+        filterItem
       );
       dispatch(getData(filterData.data));
-      setHeading("search result for:");
+      if((!selectPrice && selectCategory) || (selectCategory && selectPrice)){
+      setHeading("search result for:"+selectCategory);
+      }else{
+        setHeading("search range for:"+selectPrice[0]+"-"+selectPrice[1]);
+        console.log(selectPrice)
+      }
     } catch (error) {
       console.log(error);
     } finally {
       dispatch(loadingStatus(false));
     }
   };
-  //function to create pagenumber
-
+useEffect(()=>{
+if(selectPrice !== "" || selectCategory !==""){
+  filter({selectPrice,selectCategory});
+}
+},[selectPrice,selectCategory])
   return (
     <>
       {/* right section */}
@@ -46,8 +54,7 @@ const Home = () => {
               placeholder="Sort by Price"
               onChange={(e) => {
                 let priceValue = e.target.value.split("-");
-                filterdatas={...filterdatas,price:priceValue};
-                filter();
+                setSelectPrice(priceValue);
               }}
             >
               {priceSort.map((ele, index) => {
@@ -66,8 +73,7 @@ const Home = () => {
             <Select
               placeholder="Sort by Category"
               onChange={(e) => {
-                filterdatas={...filterdatas,category:e.target.value}
-                filter();
+               setSelectCategory(e.target.value);
               }}
             >
               {category.map((ele, index) => {

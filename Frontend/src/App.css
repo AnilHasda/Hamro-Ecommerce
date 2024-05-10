@@ -1,11 +1,11 @@
-/* style for admin showall component and createproducts*/
+/* style for admin showall component, createproducts createCategory*/
 @media(min-width:768px){
-.showAll,.createProducts{
+.showAll,.createProducts,.createCategory{
     scrollbar-width: none;
     height:calc(100vh - 80px);
 }
 }
-.createProducts{
+.createProducts,.createCategory{
     overflow-y: scroll;
 }
 /* style for heading navigation section*/
