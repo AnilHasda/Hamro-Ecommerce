@@ -22,6 +22,7 @@ const signUp = async (req, resp) => {
       resp.send("something went wrong! try again later");
     }
   } catch (error) {
+    console.log(error)
     if (error.name === "ValidationError") {
       validationError(error, resp);
     } else {

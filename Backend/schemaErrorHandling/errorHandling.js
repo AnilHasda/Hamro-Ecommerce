@@ -14,7 +14,7 @@ const duplicateErrorHandling=(error,resp)=>{
         resp.status(500).json({message:`email  ${error.keyValue.email} already exist`});
       }
        else if (error.code === 11000 && error.keyPattern.user) {
-        resp.status(500).josn({message:`username ${error.keyValue.user} already exist`});
+        resp.status(500).json({message:`username ${error.keyValue.user} already exist`});
       }
       else{
         resp.status(500).json({messasge:"internal error"});

@@ -1,3 +1,4 @@
+import { query } from "express";
 import { model } from "../../Database/productListingDatabase/Model/model.js";
 import {
   validationError,
@@ -29,32 +30,52 @@ const insertData = async (req, resp) => {
 //controller for filter by category
 const filterCategory=async (req,resp)=>{
 console.log(req.body);
+let query;
+let [lowerPrice,higherPrice]=req.body.selectPrice;
 try{
-let query=await model.find({category:req.body.selectCategory});
+  if(req.body.selectPrice && req.body.selectCategory){
+    console.log("both provided")
+query=await model.find({
+  $and:[
+  {category:req.body.selectCategory},
+  {price:{$lte:Number(higherPrice),$gte:Number(lowerPrice)}}
+  ]
+});
+  }else if(req.body.selectPrice && !req.body.selectCategory){
+    console.log("only price provided")
+    query=await model.find({price:{$lte:Number(higherPrice),$gte:Number(lowerPrice)}});
+  }
+  else{
+    console.log("only category provided")
+    query=await model.find({category:req.body.selectCategory});
+  }
 if(query){
-  console.log(req.body);
+  console.log(query);
   resp.send(query);
 }
 else{
   resp.status(500).json({message:"something went wrong"});
 }
 }catch(error){
+  console.log(error)
   resp.status(500).json({message:"Internal server error"});
 }
 }
 //controller for filter by price
-const filterByPrice=async (req,resp)=>{
-  console.log(req.body);
-  try{
-  let query=await model.find({price:{$gte:Number(req.body.lowerPrice),$lte:Number(req.body.higherPrice)}});
-  if(query){
-    resp.status(200).json(query);
-  }else{
-    resp.status(500).json({message:"something went wrong"});
-  }
-  }catch(error){
-    console.log(error);
-    resp.status(500).json({message:error});
-  }
-}
-export { getData, insertData,filterCategory,filterByPrice };
+// const filterByPrice=async (req,resp)=>{
+//   console.log(req.body);
+//   try{
+//   let query=await model.find({price:{$gte:Number(req.body.lowerPrice),$lte:Number(req.body.higherPrice)}});
+//   if(query){
+//     resp.status(200).json(query);
+//   }else{
+//     resp.status(500).json({message:"something went wrong"});
+//   }
+//   }catch(error){
+//     console.log(error);
+//     resp.status(500).json({message:error});
+//   }
+// }
+
+//search controller function
+export { getData, insertData,filterCategory };
