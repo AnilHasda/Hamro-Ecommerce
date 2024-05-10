@@ -25,27 +25,27 @@ const CreateCategory = () => {
     <div className='h-auto w-full flex flex-col md:flex-row md:px-5'>
         <AdminNavigation/>
         <div className='createCategory mt-10  flex-grow flex flex-col items-center'>
-          <h3 className='text-center font-bold text-xl text-red-700 pb-10'>
+          <h3 className='text-center font-bold text-xl  pb-10'>
           Add New Category
           </h3>
-          <div className='flex w-[80%] mx-auto justify-center'>
-          <Input placeholder='Enter new category'w={{md:"50%"}} />
+          <div className='flex flex-col sm:flex-row gap-3 sm:gap-0 w-[95vw] md:w-[80%] mx-auto justify-center mb-10 '>
+          <Input placeholder='Enter new category'w={{base:"full",md:"55%"}} />
           <Button colorScheme='blue'ml={2}>Add category</Button></div>
-          <TableContainer w={{sm:"full",md:"50vw"}} bg-red pl={{sm:"30px",md:"50px"}}>
-  <Table variant='simple'>
+          <TableContainer w={{base:"full",md:"50vw",xl:"700px"}} pl={{sm:"30px",md:"50px"}} textAlign="center">
+  <Table variant='simple'w="full">
     <TableCaption>Review before deleting any item</TableCaption>
     <Thead>
       <Tr>
         <Th>Category</Th>
-        <Th visibility="hidden">category</Th>
-        <Th>Actions</Th>
+        <Th visibility="hidden"display={{base:"none"}}>category</Th>
+        <Th colSpan={2}>Actions</Th>
       </Tr>
     </Thead>
     <Tbody>
       {category.map((ele,index)=>{
         return  <Tr key={index}>
         <Td>{ele.option}</Td>
-        <Td visibility="hidden">hello</Td>
+        <Td visibility="hidden"display={{base:"none"}}>hello</Td>
         <Td display="flex"gap={20}><FiTrash2 size={25}/><BiSolidEdit size={25}/></Td>
       </Tr>
       })}

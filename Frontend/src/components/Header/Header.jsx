@@ -17,9 +17,13 @@ const Header = () => {
 let dispatch=useDispatch();
   //
   const searchFunction=(key)=>{
-    let filterData=productItems.filter(ele=>ele.name.includes(key) || ele.category.includes(key));
-    console.log(filterData)
+    let filterData=productItems.filter(ele=>{
+      let item=ele.name.toLowerCase();
+      let descr=ele.description.toLowerCase();
+      return item.includes(key) || descr.includes(key)
+    });
     dispatch(getData(filterData));
+    console.log(filterData)
   }
   return (
     <div className="h-[80px] w-full bg-[rgb(242,117,64)] opacity-100 z-10 sticky top-0 left-0 text-white flex justify-between items-center px-[10px] sm:px[30px] md:px-10 mb-[1px]">
@@ -35,8 +39,9 @@ let dispatch=useDispatch();
           bg="#fff"
           w={{ base: "60vw", md: "40vw", lg: "35vw" }}
           textColor="#000"
-          px="10px"
+          
           className="rounded-md searchBar"
+          outline="none"
         >
           <Input
             pr="4.5rem"
@@ -44,7 +49,7 @@ let dispatch=useDispatch();
             focusBorderColor="gray.400"
             border={2}
             fontSize={14}
-            onChange={(e)=>{searchFunction(e.target.value)}}
+            onChange={(e)=>{searchFunction(e.target.value.toLowerCase())}}
           />
           <InputRightElement width="4.5rem">
             <IoMdSearch size={20} color="gray" />

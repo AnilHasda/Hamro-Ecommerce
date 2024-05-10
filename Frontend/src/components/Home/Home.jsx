@@ -218,7 +218,7 @@ if(selectPrice !== "" || selectCategory !==""){
               return (
                 <button
                   key={index}
-                  className="h-10 w-[80px] bg-[#edebeb] shadow-md"
+                  className={`h-10 w-[80px] shadow-md ${pageNumber===index+1 ? "bg-[#d4cfcf]" : "bg-[#edebeb]"}`}
                   onClick={() => {
                     setPageNumber(index + 1);
                   }}
