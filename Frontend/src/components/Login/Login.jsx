@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateLogged } from "../../Redux/Slices/Slices";
 import toast from "react-hot-toast";
 import axios from "axios";
+import GetData from "../getData/getdata";
 import {
   Modal,
   ModalOverlay,
@@ -25,6 +26,7 @@ const Login=()=>{
      let logginStatus=useSelector(state=>state.isLogged.status);
      let adminStatus=useSelector(state=>state.isAdmin.status);
      console.log({logginStatus,adminStatus})
+     let {fetchLoggedInfo}=GetData();
     const loginData = async (e) => {
       e.preventDefault();
       let data = { user, password };
@@ -35,6 +37,7 @@ const Login=()=>{
         setUser("");
         setPassword("");
         if (response.data.isLogged === true) {
+          fetchLoggedInfo();
           toast.success(response.data.message);
           dispatch(updateLogged({isLogged:response.data.isLogged,isAdmin:response.data.isAdmin}));
           onClose();

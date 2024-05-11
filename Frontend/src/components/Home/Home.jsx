@@ -12,6 +12,7 @@ const Home = () => {
   let [selectPrice,setSelectPrice]=useState("");
   let [selectCategory,setSelectCategory]=useState("");
   let response = useSelector((state) => state.responseData);
+  console.log(response);
   let dispatch = useDispatch();
   let isLoading = useSelector((state) => state.isLoading.status);
   let category = useSelector((state) => state.category);

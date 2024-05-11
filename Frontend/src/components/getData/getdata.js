@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getData,loadingStatus,filterData} from "../../Redux/Slices/Slices";
+import { getData,loadingStatus,filterData,updateLogged} from "../../Redux/Slices/Slices";
 const GetData = () => {
   let dispatch = useDispatch();
   const fetchData = async () => {
@@ -16,9 +16,21 @@ const GetData = () => {
       dispatch(loadingStatus(false));
     }
   };
+  const fetchLoggedInfo=async ()=>{
+    try{
+      let loggedInfo=await axios.get("http://localhost:4000/auth/loggedInfo",{withCredentials:true});
+if(loggedInfo?.data){
+  console.log(loggedInfo.data)
+  dispatch(updateLogged({isLogged:loggedInfo.data.isLogged,isAdmin:loggedInfo.data.isAdmin}));
+}
+    }catch(error){
+      console.log({loggedError:error});
+    }
+  }
   useEffect(() => {
     fetchData();
+    fetchLoggedInfo();
   }, []);
-  return fetchData;
+  return {fetchData,fetchLoggedInfo};
 };
 export default GetData;

@@ -11,8 +11,6 @@ const CreateProducts = () => {
   let [name, setName] = useState("");
   let file = useRef(null);
   let categoryOptions=useSelector(state=>state.category);
-  let adminStatus = useSelector((state) => state.isAdmin.status);
-  adminStatus = true;
   //function of previewImage
   const showPreview = (e) => {
     let file = e.target.files[0];
@@ -54,7 +52,6 @@ const CreateProducts = () => {
   }
   return (
     <>
-      {adminStatus === true ? (
         <div className="createProducts md:w-[60vw]  text-black  py-10">
           <form
             className="w-[90%] md:w-[400px] lg:w-[600px] m-auto"
@@ -158,9 +155,7 @@ const CreateProducts = () => {
             </button>
           </form>
         </div>
-      ) : (
-        <p>warning:only admin can access this</p>
-      )}
+      
     </>
   );
 };

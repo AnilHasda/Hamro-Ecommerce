@@ -31,7 +31,7 @@ const ShowAllData = () => {
 let response=useSelector(state=>state.responseData);
 let isLoading=useSelector(state=>state.isLoading.status);
 console.log(isLoading)
-let fetchData=GetData();
+let {fetchData}=GetData();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
