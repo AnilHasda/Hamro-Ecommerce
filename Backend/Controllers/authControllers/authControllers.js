@@ -16,7 +16,9 @@ const signUp = async (req, resp) => {
     let result = await query.save();
     if (result) {
       let token = tokenGenerator(req.body, SECRET_KEY);
-      resp.cookie("token", token, { httpOnly: true });
+      let expireDate=new Date();
+      expireDate.setDate(expireDate.getDate()+7);
+      resp.cookie("token", token, { httpOnly: true,expires:expireDate });
       resp.status(200).json({ message: "Your account has been created" });
     } else {
       resp.send("something went wrong! try again later");
@@ -53,7 +55,7 @@ export const login = async (req, resp) => {
       resp.json({ message: "username doesnot matched" });
     }
   } catch (error) {
-    resp.send("something went wrong");
+    resp.status(500).json({message:"something went wrong"});
     console.log(error);
   }
 };

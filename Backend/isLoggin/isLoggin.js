@@ -4,7 +4,7 @@ dotenv.config("../.env");
 const isLoggin=(req,resp,next)=>{
     let token=req.cookies.token;
     if(!token){
-        resp.send("please loggin to continue");
+        resp.status(200).json({message:"please loggin to continue",isLogged:false});
     }
     else{                   
         try{
@@ -14,11 +14,11 @@ const isLoggin=(req,resp,next)=>{
             next();
         }
         else{
-            resp.send("something went wrong! try again later");
+            resp.status(500).json({message:"something went wrong! try again later"});
         }
         }
         catch(error){
-            resp.send("unauthorized access");
+            resp.status(200).json({message:"unauthorized access"});
         }
     }
 }
