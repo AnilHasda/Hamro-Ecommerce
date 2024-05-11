@@ -6,13 +6,7 @@ let initialState = {
   responseData:[],
   //instance of responseData for search operation
   filterResponseData:[],
-  category:[
-    {"option":"watch"},
-    {"option":"shoes"},
-    {"option":"clothes"},
-    {"option":"mobiles"},
-    {"option":"others"},
-  ],
+  category:[],
   priceRange:[
     {"price":"1-100"},
     {"price":"100-200"},
@@ -54,8 +48,11 @@ state.responseData=action.payload;
     },
     updateCategory:(state,action)=>{
       state.category=[...state.category,{option:action.payload}];
+    },
+    addCategory:(state,action)=>{
+      state.category=action.payload;
     }
   },
 });
-export let {getData,updateLogged,logOut,loadingStatus,updateCart,filterData}=slice1.actions;
+export let {getData,updateLogged,logOut,loadingStatus,updateCart,filterData,addCategory}=slice1.actions;
 export default slice1.reducer;
