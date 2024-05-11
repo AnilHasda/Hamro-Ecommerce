@@ -2,8 +2,9 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import CookieParser from "cookie-parser";
-import router1 from "./Routes/productLIstingRoutes/routes.js"
-import router2 from "./Routes/authRoutes/authRoutes.js";
+import productRouter from "./Routes/productLIstingRoutes/routes.js"
+import authRouter from "./Routes/authRoutes/authRoutes.js";
+import adminRouter from "./Routes/adminRoute/adminRoute.js";
 import connection from "./Database/Connection/connection.js";
 import { fileURLToPath } from 'url';
 import path,{ dirname } from 'path';
@@ -26,8 +27,9 @@ app.use(express.urlencoded({extended:true}));
     credentials:true,
  }));
 const port=process.env.PORT || 5000;
-app.use(router1);
-app.use(router2)
+app.use(productRouter);
+app.use(authRouter);
+app.use(adminRouter);
 app.listen(port,()=>{
     console.log("App is running on port:"+port);
 })
