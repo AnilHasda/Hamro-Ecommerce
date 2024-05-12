@@ -85,7 +85,7 @@ toast.error(error.responseData.data.message);
   }
   return (
     <div className="h-auto w-full flex flex-col md:flex-row lg:gap-[50px] md:px-[20px] ">
-      <AdminNavigation />
+      <AdminNavigation>Create Products</AdminNavigation>
       <div className="showAll overflow-y-scroll md:px-4 md:justify-center lg:justify-normal lg:px-0 w-full flex flex-wrap gap-5 py-10">
          {/*  update modal starts from here*/}
          <Modal

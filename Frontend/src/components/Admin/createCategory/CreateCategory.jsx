@@ -33,6 +33,7 @@ import GetData from "../../getData/getdata";
 const CreateCategory = () => {
   let [category, setCategory] = useState("");
   let [updateData,setUpdateData]=useState("");
+  let [id,setId]=useState("");
   let categoryList = useSelector((state) => state.category);
   // chakra modal variables
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -79,15 +80,18 @@ const CreateCategory = () => {
     }
   };
   //function to update category
-  const updateCategory = async (id) => {
+  const updateCategory = async (e) => {
+    e.preventDefault();
       try {
         let { data } = await axios.put(
           "http://localhost:4000/admin/updateCategory/"+id,
+          {category:updateData},
           { withCredentials: true }
         );
         if (data) {
           toast.success(data.message);
           fetchCategory();
+          onClose();
         }
       } catch (error) {
         toast.error(error.data.message);
@@ -106,14 +110,14 @@ const CreateCategory = () => {
       >
      
         <ModalOverlay />
-        <form>
+        <form onSubmit={updateCategory}>
         <ModalContent>
           <ModalHeader>Update Category</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
               <FormLabel>Category</FormLabel>
-              <Input type="text"value={updateData} onChange={e=>setUpdateData(prev=>!prev ? ele.category : e.target.value)}ref={initialRef} />
+              <Input type="text"value={updateData} onChange={e=>setUpdateData(e.target.value)}ref={initialRef} />
             </FormControl>
 
           </ModalBody>
@@ -167,7 +171,7 @@ const CreateCategory = () => {
             </Thead>
             <Tbody>
               {categoryList.map((ele, index) => {
-                return <div key={index}>
+                return (
                   <Tr key={index}>
                     <Td>{ele.category}</Td>
                     <Td visibility="hidden" display={{ base: "none" }}>
@@ -175,10 +179,10 @@ const CreateCategory = () => {
                     </Td>
                     <Td display="flex" gap={20}>
                       <FiTrash2 size={25} onClick={()=>{deleteCategory(ele._id)}}/>
-                      <BiSolidEdit size={25} onClick={onOpen}/>
+                      <BiSolidEdit size={25} onClick={()=>{setId(ele._id);setUpdateData(ele.category);onOpen();}}/>
                     </Td>
                   </Tr>
-                </div>
+                );
               })}
             </Tbody>
           </Table>

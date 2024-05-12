@@ -2,7 +2,8 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import {Button} from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
-const AdminNavigation = () => {
+const AdminNavigation = ({children}) => {
+  console.log({children})
   let location=useLocation();
   return (
     <div className="adminNavigation h-auto md:h-[100vh] pr-5 w-[95vw] mx-auto md:mx-0 md:w-[400px]  pt-10 pl-3 md:border-r-2">
@@ -14,7 +15,7 @@ const AdminNavigation = () => {
         </Button>
       </NavLink>
       <NavLink to="/Admin/showAllData"> <Button className="w-full"colorScheme={location.pathname==="/Admin/showAllData"?"orange":"gray"}>
-          Show Product 
+          Show Data
         </Button></NavLink>
       <NavLink to="/Admin/createCategory"> <Button className="w-full"colorScheme={location.pathname==="/Admin/createCategory"?"orange":"gray"}>
           Create Category
