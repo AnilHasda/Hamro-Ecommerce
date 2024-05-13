@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Select } from "@chakra-ui/react";
 import { getData, loadingStatus,updateCart } from "../../Redux/Slices/Slices";
 import axios from "axios";
+import { useContextData } from "../../addtocartContextApi/Context/createContext";
 const Home = () => {
   let [quantity, setQunatity] = useState(1);
   let [heading, setHeading] = useState("OUR PRODUCTS");
@@ -12,7 +13,7 @@ const Home = () => {
   let [selectPrice,setSelectPrice]=useState("");
   let [selectCategory,setSelectCategory]=useState("");
   let response = useSelector((state) => state.responseData);
-  console.log(response);
+  let {data,addToCart}=useContextData();
   let dispatch = useDispatch();
   let isLoading = useSelector((state) => state.isLoading.status);
   let category = useSelector((state) => state.category);
@@ -97,6 +98,7 @@ if(selectPrice !== "" || selectCategory !==""){
                   pageNumber * maxNumber
                 )
                 .map((ele, index) => {
+                  let cartData={item:ele.item,id:ele._id,description:ele.description,name:ele.name,price:ele.price};
                   return (
                     <div key={ele._id}>
                       <div className="h-auto py-[20px] w-[98vw] sm:w-[250px] lg:w-[300px] bg-[#f1f1f1] shadow-md text-center rounded-md">
@@ -136,7 +138,7 @@ if(selectPrice !== "" || selectCategory !==""){
                           <button className="px-3 py-[5px] text-sm bg-blue-600 text-white rounded-md mt-[15px]">
                             See detail
                           </button>
-                          <button className="px-3 py-[5px] text-sm bg-red-600 text-white ml-4 rounded-md mt-[15px]"onClick={()=>{dispatch(updateCart(1))}}>
+                          <button className="px-3 py-[5px] text-sm bg-red-600 text-white ml-4 rounded-md mt-[15px]"onClick={()=>{addToCart(cartData)}}>
                             Add to cart
                           </button>
                         </div>
@@ -146,6 +148,7 @@ if(selectPrice !== "" || selectCategory !==""){
                 })
                 // padingation false condition 
               :response.map((ele,index)=>{
+                let cartData={item:ele.item,id:ele._id,description:ele.discription,name:ele.name,price:ele.price};
                 return <div key={ele._id}>
                 <div className="h-auto py-[20px]  w-[98%] sm:w-[40%] md:w-[30%] lg:w-[300px] bg-[#f1f1f1] shadow-md text-center rounded-md">
                   <img
@@ -184,7 +187,7 @@ if(selectPrice !== "" || selectCategory !==""){
                     <button className="px-3 py-[5px] text-sm bg-blue-600 text-white rounded-md mt-[15px]">
                       See detail
                     </button>
-                    <button className="px-3 py-[5px] text-sm bg-red-600 text-white ml-4 rounded-md mt-[15px]">
+                    <button className="px-3 py-[5px] text-sm bg-red-600 text-white ml-4 rounded-md mt-[15px]"onClick={()=>{addToCart(cartData)}}>
                       Add to cart
                     </button>
                   </div>

@@ -15,6 +15,7 @@ import Admin from "../components/Admin/Admin";
 import ShowAllData from "../components/Admin/adminShowData/ShowAllData";
 import CreateCategory from "../components/Admin/createCategory/CreateCategory";
 import Order from "../components/Profile/Order";
+import AddCart from "../components/addCart/AddCart";
 const RouterConfig = () => {
   return (
     <Router>
@@ -33,6 +34,7 @@ const RouterConfig = () => {
           </Route>
           <Route path="Login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
+          <Route path="addToCart"element={<AddCart/>}/>
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

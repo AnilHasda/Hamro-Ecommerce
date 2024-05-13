@@ -9,11 +9,14 @@ import Login from "../Login/Login";
 import SignUp from "../Signup/SignUp";
 import { InputGroup, Input, InputRightElement } from "@chakra-ui/react";
 import { getData } from "../../Redux/Slices/Slices";
+import { useContextData } from "../../addtocartContextApi/Context/createContext";
+import GetData from "../getData/getdata";
 const Header = () => {
   let location = useLocation();
+  let {fetchData}=GetData();
+  let {cartData}=useContextData();
   let path =
-    location.pathname === "/" || location.pathname === "/Admin/showAllData";
-  let totalCart = useSelector((state) => state.cartItem.total);
+    location.pathname === "/" || location.pathname === "/Admin/showAllData" || location.pathname==="/addToCart";
   let productItems = useSelector((state) => state.filterResponseData);
   let isAdmin = useSelector((state) => state.isAdmin.status);
   let isLoggin = useSelector((state) => state.isLogged.status);
@@ -41,7 +44,7 @@ const Header = () => {
       {path && (
         <InputGroup
           bg="#fff"
-          w={{ base: "60vw", md: "40vw", lg: "35vw" }}
+          w={{ base: "60vw", md: "40vw", lg: "40vw" }}
           textColor="#000"
           className="rounded-md searchBar"
           outline="none"
@@ -64,22 +67,21 @@ const Header = () => {
       {/* input chakra component end here*/}
       <IoMdMenu size={30} className="block lg:hidden" />
       <div className="hidden lg:flex gap-5">
-        <NavLink
-          to="/"
-          onClick={() => {
-            location.reload();
-          }}
-        >
+        <NavLink to="/" onClick={fetchData}>
           Home
         </NavLink>
         {isLoggin && <NavLink to="/Profile">Profile</NavLink>}
         {isAdmin && <NavLink to="/Admin">Admin</NavLink>}
+        {isLoggin===false &&
+        <>
         <Login />
         <SignUp />
-        <NavLink to="#" className="relative">
+        </>
+}
+        <NavLink to="/addToCart" className="relative">
           <BsCartPlus size={30} className="" />
           <div className="absolute h-5 w-5 rounded-full bg-white top-[-15px] left-4 grid place-content-center text-[rgb(255,106,0)] text-sm">
-            {totalCart}
+          {cartData.length}
           </div>
         </NavLink>
       </div>
