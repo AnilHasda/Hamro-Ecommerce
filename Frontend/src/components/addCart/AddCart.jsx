@@ -16,28 +16,13 @@ import {
 } from "@chakra-ui/react";
 const AddCart = () => {
   // select variables
-  let [selectAll, setSelectAll] = useState(false);
   let [totalPrice, setTotalPrice] = useState(0);
+  // state for checkbox
+  let [checkbox,setCheckbox]=useState([]);
   // state for handling inputs data
   let [inputs, setInputs] = useState({});
   let { cartData,removeAll,removeLocal } = useContextData();
   let isLoggin = useSelector((state) => state.isLogged.status);
-  //function to check checkbox status
-  const checkCheckBox = () => {
-    let totalPrice = cartData.reduce((acc, ele) => {
-      acc += ele.price;
-      return acc;
-    }, 0);
-    console.log({ totalPrice });
-    setTotalPrice(totalPrice);
-  };
-  useEffect(() => {
-    if (cartData.length > 0 && selectAll === true) {
-      checkCheckBox();
-    } else {
-      setTotalPrice(0);
-    }
-  }, [selectAll]);
   // function to handle input/quantity
   function handleChange(e) {
     setInputs((prev) => {
@@ -45,6 +30,20 @@ const AddCart = () => {
       return updateInput;
     });
     console.log(inputs);
+  }
+  // function for checkBox
+  const handleCheck=(e)=>{
+let {name,checked}=e.target;
+if(name===selectAll){
+  alert("i am don")
+  let updateCheck=cartData.map(ele=>({...ele,isChecked:checked}));
+  setCheckbox(updateCheck);
+}
+else{
+let updateCheck=cartData.map((ele,index)=>ele.name+index===name?{...ele,isChecked:checked}:{...ele,isChecked:false});
+setCheckbox(updateCheck);
+}
+console.log(checkbox);
   }
   return isLoggin ? (
     cartData?.length > 0 ? (
@@ -61,9 +60,7 @@ const AddCart = () => {
                 type="checkbox"
                 name="selectAll"
                 id="selectAll"
-                onChange={() => {
-                  setSelectAll((prev) => !prev);
-                }}
+                onChange={handleCheck}
               />
               <label htmlFor="selectAll" className="pl-1">
                 Select All
@@ -118,10 +115,9 @@ const AddCart = () => {
                         <div>
                           <input
                             type="checkbox"
-                            name="selectOne"
+                            name={ele.name+index}
                             id="selectOne"
-                            checked={selectAll}
-                            onChange={() => {}}
+                            onChange={handleCheck}
                           />
                           <label htmlFor="selectOne" className="pl-1">
                             Select
