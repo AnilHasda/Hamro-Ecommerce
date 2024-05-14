@@ -37,7 +37,7 @@ const Header = () => {
       <div className="flex gap-5">
         <IoCartOutline size={30} />
         <h3 className="hidden sm:block sm:text-md md:text-xl font-semibold">
-          E-commerce Site
+          Hamro E-commerce
         </h3>
       </div>
       {/* input chakra component */}
@@ -81,7 +81,7 @@ const Header = () => {
         <NavLink to="/addToCart" className="relative">
           <BsCartPlus size={30} className="" />
           <div className="absolute h-5 w-5 rounded-full bg-white top-[-15px] left-4 grid place-content-center text-[rgb(255,106,0)] text-sm">
-          {cartData.length}
+          {cartData?cartData.length:0}
           </div>
         </NavLink>
       </div>

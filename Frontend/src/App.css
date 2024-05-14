@@ -1,11 +1,17 @@
 /* style for admin showall component, createproducts createCategory*/
 @media(min-width:768px){
-.showAll,.createProducts,.createCategory{
+.showAll,.createProducts,.createCategory,.add-cart{
     scrollbar-width: none;
     height:calc(100vh - 80px);
 }
 }
-.createProducts,.createCategory{
+@media(min-width:540px){
+    .add-cart{
+        scrollbar-width: none;
+        height:calc(100vh - 80px);
+    }
+    }
+.createProducts,.createCategory,.add-cart{
     overflow-y: scroll;
 }
 /* style for heading navigation section*/
