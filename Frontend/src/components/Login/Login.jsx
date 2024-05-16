@@ -1,10 +1,11 @@
 import React, { useState,useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { updateLogged } from "../../Redux/Slices/Slices";
+// import { updateLogged } from "../../Redux/Slices/Slices";
 import toast from "react-hot-toast";
 import axios from "axios";
 import GetData from "../getData/getdata";
+import { IoPersonSharp } from "react-icons/io5";
 import {
   Modal,
   ModalOverlay,
@@ -22,7 +23,7 @@ import {
 const Login=()=>{
   let [user, setUser] = useState("");
     let [password, setPassword] = useState("");
-     let dispatch = useDispatch();
+    //  let dispatch = useDispatch();
      let logginStatus=useSelector(state=>state.isLogged.status);
      let adminStatus=useSelector(state=>state.isAdmin.status);
      console.log({logginStatus,adminStatus})
@@ -39,7 +40,8 @@ const Login=()=>{
         if (response.data.isLogged === true) {
           fetchLoggedInfo();
           toast.success(response.data.message);
-          dispatch(updateLogged({isLogged:response.data.isLogged,isAdmin:response.data.isAdmin}));
+          document.cookie=`user=${user}`;
+          // dispatch(updateLogged({isLogged:response.data.isLogged,isAdmin:response.data.isAdmin}));
           onClose();
         }
       } catch (error) {
@@ -51,7 +53,7 @@ const Login=()=>{
   const finalRef = React.useRef(null)
   return (
     <>
-<NavLink to="#" onClick={onOpen}>Login</NavLink>
+<NavLink to="#" onClick={onOpen} className="flex item-center gap-1"><IoPersonSharp className="mt-[2px]"/>Login</NavLink>
       <Modal
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}

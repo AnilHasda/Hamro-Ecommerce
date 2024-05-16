@@ -20,29 +20,29 @@ import {
   FormHelperText
 } from "@chakra-ui/react";
 const SignUp = () => {
-  let [fname, setFname] = useState("");
-  let [lname, setLname] = useState("");
-  let [email, setEmail] = useState("");
-  let [user, setUser] = useState("");
-  let [password, setPassword] = useState("");
-  let [cpassword, setCpassword] = useState("");
+  // let [fname, setFname] = useState("");
+  // let [lname, setLname] = useState("");
+  // let [email, setEmail] = useState("");
+  // let [user, setUser] = useState("");
+  // let [password, setPassword] = useState("");
+  // let [cpassword, setCpassword] = useState("");
   let dispatch = useDispatch();
+let [userData,setUserData]=useState({});
   async function sendData(e) {
     e.preventDefault();
-    let formData = { fname, lname, email, user, password };
     try {
-      if (password === cpassword) {
+      if (userData.password === userData.cpassword) {
         let response = await axios.post(
           "http://localhost:4000/auth/signup",
-          formData,
+          userData,
           {
             withCredentials: true,
           }
         );
         console.log(response.data);
-        if (response && response.data.userLogged === true) {
-          dispatch(updateLogged());
+        if (response?.data?.isLogged === true) {
           toast.success(response.data.message);
+          dispatch(updateLogged({isLogged:true,isAdmin:false}));
           onClose();
         }
       } else {
@@ -51,6 +51,15 @@ const SignUp = () => {
     } catch (error) {
       toast.error(error.response.data.message);
     }
+  }
+  // handlechange function to handle user data
+  function handleChange(e){
+let {name,value}=e.target;
+setUserData(prev=>{
+  let updateData={...prev,[name]:value}
+  return updateData;
+})
+console.log(userData);
   }
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
@@ -75,7 +84,8 @@ const SignUp = () => {
                 <Input
                   type="text"
                   placeholder="Enter First-name"
-                  onChange={(e) => setFname(e.target.value)}
+                  name="fname"
+                  onChange={handleChange}
                   required
                 />
               </FormControl>
@@ -84,13 +94,14 @@ const SignUp = () => {
                 <Input
                   type="text"
                   placeholder="Enter Last-name"
-                  onChange={(e) => setLname(e.target.value)}
+                  name="lname"
+                  onChange={handleChange}
                   required
                 />
               </FormControl>
               <FormControl>
                 <FormLabel>Email address</FormLabel>
-                <Input type="email"placeholder="Enter email" onChange={e=>setEmail(e.target.value)} required/>
+                <Input type="email"placeholder="Enter email"name="email" onChange={handleChange} required/>
                 <FormHelperText>We'll never share your email.</FormHelperText>
               </FormControl>
               <FormControl mt={4}>
@@ -98,7 +109,18 @@ const SignUp = () => {
                 <Input
                   type="text"
                   placeholder="Enter user-name"
-                  onChange={(e) => setUser(e.target.value)}
+                  name="user"
+                  onChange={handleChange}
+                  required
+                />
+              </FormControl>
+              <FormControl mt={4}>
+                <FormLabel>Contact no.</FormLabel>
+                <Input
+                  type="number"
+                  placeholder="Enter phone number"
+                  name="phone"
+                  onChange={handleChange}
                   required
                 />
               </FormControl>
@@ -107,7 +129,8 @@ const SignUp = () => {
                 <Input
                   type="password"
                   placeholder="Enter you password"
-                  onChange={(e) => setPassword(e.target.value)}
+                  name="password"
+                  onChange={handleChange}
                   required
                 />
               </FormControl>
@@ -116,7 +139,8 @@ const SignUp = () => {
                 <Input
                   type="password"
                   placeholder="Enter confirm-password"
-                  onChange={(e) => setCpassword(e.target.value)}
+                  name="cpassword"
+                  onChange={handleChange}
                   required
                 />
               </FormControl>

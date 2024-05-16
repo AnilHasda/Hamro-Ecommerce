@@ -23,6 +23,7 @@ const GetData = () => {
     try{
       let loggedInfo=await axios.get("http://localhost:4000/auth/loggedInfo",{withCredentials:true});
 if(loggedInfo?.data){
+  console.log(loggedInfo.data)
   dispatch(updateLogged({isLogged:loggedInfo.data.isLogged,isAdmin:loggedInfo.data.isAdmin || false}));
 }
     }catch(error){

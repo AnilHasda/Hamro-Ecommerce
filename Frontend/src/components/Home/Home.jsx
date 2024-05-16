@@ -18,7 +18,7 @@ const Home = () => {
   let dispatch = useDispatch();
   let isLoading = useSelector((state) => state.isLoading.status);
   let category = useSelector((state) => state.category);
-  console.log(category);
+
   let priceSort = useSelector((state) => state.priceRange);
   let maxNumber = 8;
   GetData();
@@ -35,7 +35,6 @@ const Home = () => {
         setHeading("search result for:" + selectCategory);
       } else {
         setHeading("search range for:" + selectPrice[0] + "-" + selectPrice[1]);
-        console.log(selectPrice);
       }
     } catch (error) {
       console.log(error);
@@ -127,23 +126,10 @@ const Home = () => {
                                   : ele.description}
                               </p>
                             </div>
-                            <div className="flex justify-center gap-5">
-                              <input
-                                type="number"
-                                min={1}
-                                max={100}
-                                value={quantity}
-                                onChange={(e) => {
-                                  setQunatity(e.target.value);
-                                }}
-                                className=" outline-none text-black text-center"
-                              />
-                              <br />
                               <div className="flex justify-center text-[#ff5900be] text-md">
                                 <p>${ele.price}</p>
                               </div>
                               <br />
-                            </div>
                             <button className="px-3 py-[5px] text-sm bg-blue-600 text-white rounded-md mt-[15px]">
                               See detail
                             </button>
@@ -190,23 +176,10 @@ const Home = () => {
                                 : ele.description}
                             </p>
                           </div>
-                          <div className="flex justify-center gap-5">
-                            <input
-                              type="number"
-                              min={1}
-                              max={100}
-                              value={quantity}
-                              onChange={(e) => {
-                                setQunatity(e.target.value);
-                              }}
-                              className=" outline-none text-black text-center"
-                            />
-                            <br />
                             <div className="flex justify-center text-[#ff5900be] text-md">
                               <p>${ele.price}</p>
                             </div>
                             <br />
-                          </div>
                           <button className="px-3 py-[5px] text-sm bg-blue-600 text-white rounded-md mt-[15px]">
                             See detail
                           </button>
