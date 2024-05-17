@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProfieNavigation from "./ProfieNavigation";
 import axios from "axios";
+import toast from "react-hot-toast";
 import {
   Card,
   CardHeader,
@@ -36,7 +37,6 @@ const Profile = () => {
   const finalRef = React.useRef(null);
   useEffect(() => {
     async function getData() {
-      console.log("i am called");
       try {
         let { data } = await axios.get("http://localhost:4000/Profile", {
           withCredentials: true,
@@ -59,9 +59,21 @@ const Profile = () => {
     getData();
   }, []);
   //update function
-  const updateProfile = (e) => {
+  const updateProfile = async (e) => {
     e.preventDefault();
-    alert("i am clicked");
+    try {
+      let { data } = await axios.post(
+        "http://localhost:4000/Profile/updateProfile",
+        formData,
+        { withCredentials: true }
+      );
+      if (data) {
+        toast.success(data.message);
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.message);
+    }
   };
   //function for handlechange
   function handleChange(e) {
@@ -102,7 +114,13 @@ const Profile = () => {
 
                     <FormControl mt={4}>
                       <FormLabel>Last name</FormLabel>
-                      <Input type="text" name="lname"value={formData?.lname} onChange={handleChange} required/>
+                      <Input
+                        type="text"
+                        name="lname"
+                        value={formData?.lname}
+                        onChange={handleChange}
+                        required
+                      />
                     </FormControl>
                     <FormControl>
                       <FormLabel>Email</FormLabel>

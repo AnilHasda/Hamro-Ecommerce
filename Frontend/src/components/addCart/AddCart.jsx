@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useContextData } from "../../addtocartContextApi/Context/createContext";
 import { useSelector } from "react-redux";
 import CartSummary from "./CartSummary";
+import axios from "axios";
+import toast from "react-hot-toast";
 import {
   Card,
   CardBody,
@@ -16,17 +18,19 @@ const AddCart = () => {
   // select variables
   let [totalPrice, setTotalPrice] = useState(0);
   // state for checkbox
-  let [checkbox,setCheckbox]=useState([]);
+  let [checkbox, setCheckbox] = useState([]);
   // state for handling inputs data
   let [inputs, setInputs] = useState({});
-  let { cartData,removeAll,removeLocal,setCartData,getData } = useContextData();
+  let [userId, setUserId] = useState("");
+  let { cartData, removeAll, removeLocal, setCartData, getData } =
+    useContextData();
   let isLoggin = useSelector((state) => state.isLogged.status);
-  useEffect(()=>{
+  useEffect(() => {
     setCheckbox(cartData);
-  },[]);
-  useEffect(()=>{
+  }, []);
+  useEffect(() => {
     totalPriceCalculation();
-  },[checkbox,cartData])
+  }, [checkbox, cartData]);
   // function to handle input/quantity
   function handleChange(e) {
     setInputs((prev) => {
@@ -35,41 +39,83 @@ const AddCart = () => {
     });
   }
   // function for checkBox
-  const handleCheck=(e)=>{
-let {name,checked}=e.target;
-if(name==="selectAll"){
-  let updateCheck=cartData.map(ele=>({...ele,isChecked:checked}));
-  setCheckbox(updateCheck);
-}
-else{
-let updateCheck=checkbox.map((ele,index)=>ele.name+index===name?{...ele,isChecked:checked}:ele);
-setCheckbox(updateCheck);
-}
-  }
-  const totalPriceCalculation=()=>{
-    let total=checkbox.filter(ele=>ele.isChecked===true).reduce((acc,curEle)=>{
-      acc+=curEle.price;
-      return acc;
-    },0)
-    setTotalPrice(total);
-    console.log(total)
-  }
-
-  function changeQuantity(id,operation){
-    let updateData;
-    let findData=cartData.filter(ele=>ele.id===id);
-    if(operation==="increment"){
-updateData=cartData.map(ele=>ele.id===id?{...ele,quantity:ele.quantity+1,price:ele.price+(ele.price/ele.quantity)}:ele);
-localStorage.setItem("cartData",JSON.stringify(updateData));
-    }else{
-      if(findData[0]?.quantity>1){
-    updateData=cartData.map(ele=>ele.id===id?{...ele,quantity:ele.quantity-1,price:ele.price-(ele.price/ele.quantity)}:ele);
-    localStorage.setItem("cartData",JSON.stringify(updateData));
-    }else{
-      alert("You can decrease quantity lower than 1 ! Thank You!")
+  const handleCheck = (e) => {
+    let { name, checked } = e.target;
+    if (name === "selectAll") {
+      let updateCheck = cartData.map((ele) => ({ ...ele, isChecked: checked }));
+      setCheckbox(updateCheck);
+    } else {
+      let updateCheck = checkbox.map((ele, index) =>
+        ele.name + index === name ? { ...ele, isChecked: checked } : ele
+      );
+      setCheckbox(updateCheck);
     }
+  };
+  const totalPriceCalculation = () => {
+    let total = checkbox
+      .filter((ele) => ele.isChecked === true)
+      .reduce((acc, curEle) => {
+        acc += curEle.price;
+        return acc;
+      }, 0);
+    setTotalPrice(total);
+    console.log(total);
+  };
+
+  function changeQuantity(id, operation) {
+    let updateData;
+    let findData = cartData.filter((ele) => ele.id === id);
+    if (operation === "increment") {
+      updateData = cartData.map((ele) =>
+        ele.id === id
+          ? {
+              ...ele,
+              quantity: ele.quantity + 1,
+              price: ele.price + ele.price / ele.quantity,
+            }
+          : ele
+      );
+      localStorage.setItem("cartData", JSON.stringify(updateData));
+    } else {
+      if (findData[0]?.quantity > 1) {
+        updateData = cartData.map((ele) =>
+          ele.id === id
+            ? {
+                ...ele,
+                quantity: ele.quantity - 1,
+                price: ele.price - ele.price / ele.quantity,
+              }
+            : ele
+        );
+        localStorage.setItem("cartData", JSON.stringify(updateData));
+      } else {
+        alert("You can decrease quantity lower than 1 ! Thank You!");
+      }
+    }
+    getData();
   }
-getData();
+  // function to make order
+  async function placeOrder(productId,quantity,price) {
+    try {
+      let { data } = await axios.get("http://localhost:4000/Profile", {
+        withCredentials: true,
+      });
+      setUserId(data[0]._id);
+    } catch (error) {
+      console.log(error);
+    }
+    try {
+      let { data } = await axios.post(
+        "http://localhost:4000/Profile/PlaceOrder",
+        { userId:userId,productId:productId,quantity:quantity,price:price },
+        { withCredentials: true }
+      );
+      if (data) {
+        toast.success(data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   }
   return isLoggin ? (
     cartData?.length > 0 ? (
@@ -86,8 +132,15 @@ getData();
                 type="checkbox"
                 name="selectAll"
                 id="selectAll"
-                checked={checkbox.filter(ele=>ele.isChecked===true).length===checkbox.length && checkbox.length!==0?true:false}
-                onChange={(e)=>{handleCheck(e)}}
+                checked={
+                  checkbox.filter((ele) => ele.isChecked === true).length ===
+                    checkbox.length && checkbox.length !== 0
+                    ? true
+                    : false
+                }
+                onChange={(e) => {
+                  handleCheck(e);
+                }}
               />
               <label htmlFor="selectAll" className="pl-1">
                 Select All
@@ -124,83 +177,99 @@ getData();
                     alt={ele.name}
                     m={{ base: "auto", md: "0" }}
                   />
+                    <Stack py={5}>
+                      <CardBody>
+                        <Heading fontSize="lg">{ele.name}</Heading>
 
-                  <Stack py={5}>
-                    <CardBody>
-                      <Heading fontSize="lg">{ele.name}</Heading>
-
-                      <Text py="2" fontSize="sm">
-                        {ele.description}
-                      </Text>
-                      <div className="flex justify-between items-center">
-                        <Text
-                          py="2"
-                          color="rgb(242,117,64)"
-                          fontWeight="semibold"
-                        >
-                          ${ele.price}
+                        <Text py="2" fontSize="sm">
+                          {ele.description}
                         </Text>
-                        <div>
-                          <input
-                            type="checkbox"
-                            name={ele.name+index}
-                            id="selectOne"
-                            checked={checkbox[index]?.isChecked || false}
-                            onChange={(e)=>{handleCheck(e)}}
-                          />
-                          <label htmlFor="selectOne" className="pl-1">
-                            Select
-                          </label>
+                        <div className="flex justify-between items-center">
+                          <Text
+                            py="2"
+                            color="rgb(242,117,64)"
+                            fontWeight="semibold"
+                          >
+                            ${ele.price}
+                          </Text>
+                          <div>
+                            <input
+                              type="checkbox"
+                              name={ele.name + index}
+                              id="selectOne"
+                              checked={checkbox[index]?.isChecked || false}
+                              onChange={(e) => {
+                                handleCheck(e);
+                              }}
+                            />
+                            <label htmlFor="selectOne" className="pl-1">
+                              Select
+                            </label>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex gap-2 mt-2">
-                        <Text
-                          py="2"
-                          color="rgb(242,117,64)"
-                          fontWeight="semibold"
-                        >
-                          quantity:
+                        <div className="flex gap-2 mt-2">
+                          <Text
+                            py="2"
+                            color="rgb(242,117,64)"
+                            fontWeight="semibold"
+                          >
+                            quantity:
                           </Text>
                           <div className="flex items-center gap-3">
-                          <button className="text-[30px]"onClick={()=>{changeQuantity(ele.id,"decrement")}}>-</button>
-                          <input
-                            type="number"
-                            name={ele.name}
-                            min={1}
-                            max={10}
-                            value={ele.quantity}
-                            className="bg-[#e2dada] outline-none h-8 w-10 text-center"
-                            readOnly
-                            onChange={handleChange}
-                          />
-                          <button className="text-[30px]"onClick={()=>{changeQuantity(ele.id,"increment")}}>+</button>
+                            <button
+                              className="text-[30px]"
+                              onClick={() => {
+                                changeQuantity(ele.id, "decrement");
+                              }}
+                            >
+                              -
+                            </button>
+                            <input
+                              type="number"
+                              name={ele.name}
+                              min={1}
+                              max={10}
+                              value={ele.quantity}
+                              className="bg-[#e2dada] outline-none h-8 w-10 text-center"
+                              readOnly
+                              onChange={handleChange}
+                            />
+                            <button
+                              className="text-[30px]"
+                              onClick={() => {
+                                changeQuantity(ele.id, "increment");
+                              }}
+                            >
+                              +
+                            </button>
                           </div>
-                      </div>
-                    </CardBody>
+                        </div>
+                      </CardBody>
 
-                    <CardFooter pb={5}>
-                      <Button
-                        variant="solid"
-                        h={35}
-                        colorScheme="blue"
-                        fontSize="small"
-                      >
-                        Order
-                      </Button>
-                      <Button
-                        variant="solid"
-                        h={35}
-                        colorScheme="red"
-                        ml={5}
-                        fontSize="small"
-                        onClick={() => {
-                          removeLocal(ele.id);
-                        }}
-                      >
-                        Remove
-                      </Button>
-                    </CardFooter>
-                  </Stack>
+                      <CardFooter pb={5}>
+                        <Button
+                          variant="solid"
+                          h={35}
+                          colorScheme="blue"
+                          fontSize="small"
+                          onClick={()=>{placeOrder(ele.id,ele.quantity,ele.price)}}
+                        >
+                          Order
+                        </Button>
+                        <Button
+                          variant="solid"
+                          h={35}
+                          colorScheme="red"
+                          ml={5}
+                          fontSize="small"
+                          onClick={() => {
+                            removeLocal(ele.id);
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      </CardFooter>
+                    </Stack>
                 </Card>
               </div>
             );
