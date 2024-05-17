@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import {encodePassword} from "../encodePassword/encode.js";
-import { Timestamp } from "mongodb";
 export let authSchema=new mongoose.Schema({
     fname:{
         type:String,
