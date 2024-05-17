@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import {encodePassword} from "../encodePassword/encode.js";
+import { Timestamp } from "mongodb";
 export let authSchema=new mongoose.Schema({
     fname:{
         type:String,
@@ -19,13 +20,14 @@ export let authSchema=new mongoose.Schema({
         required:true,
         unique:true
     },
+    phone:{
+        type:Number,
+        required:true,
+        unique:true
+    },
     password:{
         type:String,
         required:true,
-    },
-    data_0f_registration:{
-        type:Date,
-        default:Date.now()
     },
     isAdmin:{
         type:Boolean,
@@ -33,7 +35,7 @@ export let authSchema=new mongoose.Schema({
         default:false
     }
 
-})
+},{timestamps:true})
 authSchema.pre("save",async function (next){
 await encodePassword(this,next);
 })

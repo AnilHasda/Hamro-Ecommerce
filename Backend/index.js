@@ -5,6 +5,7 @@ import CookieParser from "cookie-parser";
 import productRouter from "./Routes/productLIstingRoutes/routes.js"
 import authRouter from "./Routes/authRoutes/authRoutes.js";
 import adminRouter from "./Routes/adminRoute/adminRoute.js";
+import orderRouter from "./Routes/orderRoute/orderRoute.js";
 import connection from "./Database/Connection/connection.js";
 import { fileURLToPath } from 'url';
 import path,{ dirname } from 'path';
@@ -30,6 +31,7 @@ const port=process.env.PORT || 5000;
 app.use(productRouter);
 app.use(authRouter);
 app.use(adminRouter);
+app.use(orderRouter);
 app.listen(port,()=>{
     console.log("App is running on port:"+port);
 })

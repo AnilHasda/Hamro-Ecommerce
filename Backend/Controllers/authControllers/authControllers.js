@@ -19,7 +19,7 @@ const signUp = async (req, resp) => {
       let expireDate=new Date();
       expireDate.setDate(expireDate.getDate()+7);
       resp.cookie("token", token, { httpOnly: true,expires:expireDate });
-      resp.status(200).json({ message: "Your account has been created" });
+      resp.status(200).json({ message: "Your account has been created",isLogged:true });
     } else {
       resp.send("something went wrong! try again later");
     }
@@ -36,12 +36,15 @@ const signUp = async (req, resp) => {
 //login controller function starts from here
 export const login = async (req, resp) => {
   try {
+    console.log(req.body)
     let query = await authModel.find({ user: req.body.user });
+    console.log(query)
     if (query.length > 0) {
       let checkPassword = await bcrptjs.compare(
         req.body.password,
         query[0].password
       );
+      console.log(checkPassword);
       if (checkPassword) {
         let token = tokenGenerator(req.body, SECRET_KEY);
         resp.cookie("token", token, { httpOnly: true });
@@ -60,4 +63,15 @@ export const login = async (req, resp) => {
   }
 };
 //login controller function ends here
-export { signUp };
+// logout controller function 
+const logout=(req,resp)=>{
+  let cookie=req.cookies.token;
+  if(cookie){
+    let date=new Date(0);
+    resp.cookie("token",{expires:date});
+  resp.status(200).json({message:"User is logout",isLogged:false,isAdmin:false});
+  }else{
+    resp.status(200).json({message:"token is not available"});
+  }
+}
+export { signUp,logout };

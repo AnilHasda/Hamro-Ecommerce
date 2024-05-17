@@ -18,7 +18,7 @@ const isLoggin=(req,resp,next)=>{
         }
         }
         catch(error){
-            resp.status(200).json({message:"unauthorized access"});
+            resp.status(200).json({message:"unauthorized access",isLogged:false});
         }
     }
 }

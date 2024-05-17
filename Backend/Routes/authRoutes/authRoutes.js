@@ -1,9 +1,14 @@
 import express from "express";
 const router=express.Router();
-import { signUp,login} from "../../Controllers/authControllers/authControllers.js";
+import { signUp,login, logout} from "../../Controllers/authControllers/authControllers.js";
 import { isLoggin } from "../../isLoggin/isLoggin.js";
 import { isAdmin } from "../../isAdmin/isAdmin.js";
+import { ProfileController } from "../../Controllers/Profile/Profilecontroller.js";
+import { ProfileUpdate } from "../../Controllers/Profile/Profilecontroller.js";
 router.post("/auth/signup",signUp);
 router.post("/auth/login",login);
 router.get("/auth/loggedInfo",isLoggin,isAdmin);
+router.get("/Profile",ProfileController);
+router.post("/Profile/updateProfile",ProfileUpdate);
+router.get("/logout",logout);
 export default router;
