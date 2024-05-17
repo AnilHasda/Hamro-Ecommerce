@@ -21,7 +21,6 @@ const AddCart = () => {
   let [checkbox, setCheckbox] = useState([]);
   // state for handling inputs data
   let [inputs, setInputs] = useState({});
-  let [userId, setUserId] = useState("");
   let { cartData, removeAll, removeLocal, setCartData, getData } =
     useContextData();
   let isLoggin = useSelector((state) => state.isLogged.status);
@@ -96,11 +95,12 @@ const AddCart = () => {
   }
   // function to make order
   async function placeOrder(productId,quantity,price) {
+    let userId;
     try {
       let { data } = await axios.get("http://localhost:4000/Profile", {
         withCredentials: true,
       });
-      setUserId(data[0]._id);
+      userId=data[0]._id;
     } catch (error) {
       console.log(error);
     }
