@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { orderModel } from "../../Database/orderDatabase/orderModel/orderModel.js";
 import { ObjectId } from "mongodb";
-
+import { orderSchema } from "../../Database/orderDatabase/orderSchema/orderSchema.js";
 const getOrder = async (req, resp) => {
   console.log(req.body);
   const { userId, productId, quantity, price } = req.body;
@@ -37,12 +37,12 @@ const getOrder = async (req, resp) => {
 };
 // this controller is for admin he can update status
 const updateOrder = async (req, resp) => {
-    console.log(req.params.id)
+    console.log(req.body.status);
+    console.log(typeof req.params.id)
   try {
     const query = await orderModel.updateOne({
       _id: new ObjectId(req.params.id),
-    });
-
+    },{$set:{status:req.body.status}});
     if (query) {
       resp.status(200).json({ message: "Data updated successfully" });
     } else {
@@ -65,4 +65,20 @@ console.log(req.params.id);
     resp.status(500).json({ message: "Internal server error" ,error});
   }
 };
-export { getOrder, updateOrder, userOrder };
+// get all pending records from user this is for admin 
+const getPendingOrder=async (req,resp)=>{
+  try {
+    let response = await orderModel.find({status:"Pending"}).populate("user").populate("product").exec();
+    if (response) {
+      resp.status(200).json(response);
+    }
+  } catch (error) {
+    resp.status(500).json({ message: "Internal server error" ,error});
+  }
+}
+// get enum values for admin section
+const getEnum=(req,resp)=>{
+  let statusValues=orderSchema.path("status").enumValues;
+  resp.status(200).json(statusValues);
+}
+export { getOrder, updateOrder, userOrder,getPendingOrder,getEnum };

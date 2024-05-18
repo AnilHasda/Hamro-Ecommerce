@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 const ProfileController = async (req, resp) => {
   let token = req.cookies.token;
   let checkToken=jwt.decode(token);
-  if(checkToken.user){
+  if(checkToken?.user){
   let { user } = checkToken;
   console.log(token);
   let query = await authModel.find({ user });
