@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { updateLogged } from "../../Redux/Slices/Slices.js";
+import { updateLogged,getUser } from "../../Redux/Slices/Slices.js";
 import toast from "react-hot-toast";
 import {
   Modal,
@@ -42,6 +42,7 @@ let [userData,setUserData]=useState({});
         console.log(response.data);
         if (response?.data?.isLogged === true) {
           toast.success(response.data.message);
+          dispatch(getUser(userData.user));
           dispatch(updateLogged({isLogged:true,isAdmin:false}));
           onClose();
         }

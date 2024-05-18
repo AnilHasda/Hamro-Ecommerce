@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react'
 import { NavLink, useLocation } from "react-router-dom";
 import { IoCartOutline } from "react-icons/io5";
 import { BsCartPlus } from "react-icons/bs";
-import { IoMdSearch } from "react-icons/io";
+import { IoMdMenu } from 'react-icons/io';
 import { useSelector, useDispatch } from "react-redux";
 import Login from "../Login/Login";
 import SignUp from "../Signup/SignUp";
@@ -15,32 +15,25 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { logOut } from "../../Redux/Slices/Slices";
-import MobileNav from "./MobileNav";
-const Header = () => {
-  let location = useLocation();
+import {
+    Drawer,
+    DrawerHeader,
+    DrawerOverlay,
+    DrawerContent,
+    DrawerCloseButton,
+    useDisclosure,
+    Button,
+    DrawerBody,
+  } from '@chakra-ui/react'
+const MobileNav = () => {
+    //variables for drawer
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const btnRef = React.useRef()
   let { fetchData } = GetData();
   let { cartData } = useContextData();
-  let path =
-    location.pathname === "/" ||
-    location.pathname === "/Admin/showAllData" ||
-    location.pathname === "/addToCart";
-  let productItems = useSelector((state) => state.filterResponseData);
   let isAdmin = useSelector((state) => state.isAdmin.status);
   let isLoggin = useSelector((state) => state.isLogged.status);
   let user=useSelector(state=>state.user);
-  console.log(user)
-  let dispatch = useDispatch();
-
-  const searchFunction = (key) => {
-    let filterData = productItems.filter((ele) => {
-      let item = ele.name.toLowerCase();
-      let descr = ele.description.toLowerCase();
-      return item.includes(key) || descr.includes(key);
-    });
-    dispatch(getData(filterData));
-    console.log(filterData);
-  };
-  // logout function
   const getLogOut = async () => {
     try {
       let { data } = await axios.get("http://localhost:4000/logout", {
@@ -48,52 +41,31 @@ const Header = () => {
       });
       if (data?.message) {
         console.log(data);
-        toast.success(data.message);
+        toast.success(data?.message);
         dispatch(logOut({ isLogged: data.isLogged, isAdmin: data.isAdmin }));
       }
       else{
         console.log("data is not present")
       }
     } catch (error) {
-      console.log(error);
+     console.log(error)
     }
   };
   return (
-    <div className="h-[80px] w-full bg-[rgb(242,117,64)] opacity-100 z-10 sticky top-0 left-0 text-white flex justify-between items-center px-[10px] sm:px[30px] md:px-16 mb-[1px]">
-      <div className="flex gap-5">
-        <IoCartOutline size={30} />
-        <h3 className={`${(location.pathname === "/" || location.pathname==="/addToCart") ? "hidden" :"block"}  md:block sm:text-md md:text-xl font-semibold`}>
-          Hamro E-commerce
-        </h3>
-      </div>
-      {/* input chakra component */}
-      {path && (
-        <InputGroup
-          bg="#fff"
-          w={{ base: "60%", md: "40%", lg: "40%" }}
-          textColor="#000"
-          className="rounded-md searchBar"
-          outline="none"
-        >
-          <Input
-            pr="4.5rem"
-            placeholder="search items here..."
-            focusBorderColor="gray.400"
-            border={2}
-            fontSize={14}
-            onChange={(e) => {
-              searchFunction(e.target.value.toLowerCase());
-            }}
-          />
-          <InputRightElement width="4.5rem">
-            <IoMdSearch size={20} color="gray" />
-          </InputRightElement>
-        </InputGroup>
-      )}
-      {/* input chakra component end here*/}
-     {/* Mobile Nav will come here */}
-     <MobileNav/>
-      <div className="hidden lg:flex gap-5">
+    <div>
+         {/* Drawer componets stats here */}
+      <Drawer
+        isOpen={isOpen}
+        placement='right'
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay />
+        <DrawerContent bg="teal"textColor="white">
+          <DrawerCloseButton />
+          <DrawerHeader>Hamro E-commerce</DrawerHeader>
+          <DrawerBody>
+          <div className="flex flex-col gap-5">
         <NavLink
           to="/"
           onClick={fetchData}
@@ -102,7 +74,7 @@ const Header = () => {
           Home
         </NavLink>
         {isLoggin && (
-          <div className=" flex items-center">
+          <div className=" flex items-center relative left-[-15px]">
             <div className="navbar">
               <div className="dropdown">
                 <div className="dropbtn flex gap-1 ">
@@ -113,7 +85,7 @@ const Header = () => {
                     className="relative left-[-4px] top-1"
                   />
                 </div>
-                <div className="dropdown-content">
+                <div className="dropdown-content text-black">
                   <NavLink to="/Profile" className="a">
                     Profile
                   </NavLink>
@@ -134,16 +106,21 @@ const Header = () => {
         )}
         <NavLink
           to="/addToCart"
-          className={`${isLoggin && "translate-y-[10px]"} relative`}
+          className={`${isLoggin && "translate-y-[20px]"} relative top-5`}
         >
           <BsCartPlus size={30} className="" />
-          <div className="absolute h-5 w-5 rounded-full bg-white top-[-15px] left-4 grid place-content-center text-[rgb(255,106,0)] text-sm ">
+          <div className="absolute h-5 w-5 rounded-full bg-white text-red-600 top-[-15px] left-4 grid place-content-center text-sm ">
             {cartData ? cartData.length : 0}
           </div>
         </NavLink>
       </div>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+      {/* Drawer componets end here */}
+      <IoMdMenu size={30} className="block lg:hidden" onClick={onOpen} />
     </div>
-  );
-};
+  )
+}
 
-export default Header;
+export default MobileNav

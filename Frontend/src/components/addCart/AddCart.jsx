@@ -91,6 +91,9 @@ const AddCart = () => {
         alert("You can decrease quantity lower than 1 ! Thank You!");
       }
     }
+    console.log(updateData)
+    setCheckbox(updateData);
+    totalPriceCalculation();
     getData();
   }
   // function to make order
@@ -111,10 +114,13 @@ const AddCart = () => {
         { withCredentials: true }
       );
       if (data) {
+        removeLocal(productId);
         toast.success(data.message);
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.log(error)
+      // toast.error(error);
+      toast.error("Failed to place order ! Try again later")
     }
   }
   return isLoggin ? (
@@ -133,8 +139,8 @@ const AddCart = () => {
                 name="selectAll"
                 id="selectAll"
                 checked={
-                  checkbox.filter((ele) => ele.isChecked === true).length ===
-                    checkbox.length && checkbox.length !== 0
+                  checkbox?.filter((ele) => ele?.isChecked === true)?.length ===
+                    checkbox?.length && checkbox?.length !== 0
                     ? true
                     : false
                 }

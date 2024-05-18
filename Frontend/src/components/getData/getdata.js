@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { getUser } from "../../Redux/Slices/Slices";
 import {
   getData,
   loadingStatus,
@@ -38,7 +39,8 @@ const GetData = () => {
         { withCredentials: true }
       );
       if (loggedInfo?.data) {
-        console.log(loggedInfo.data);
+        console.log(loggedInfo);
+        dispatch(getUser(loggedInfo.data.user));
         dispatch(
           updateLogged({
             isLogged: loggedInfo.data.isLogged,
