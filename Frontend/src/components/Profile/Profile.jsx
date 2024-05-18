@@ -35,27 +35,27 @@ const Profile = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
-  useEffect(() => {
-    async function getData() {
-      try {
-        let { data } = await axios.get("http://localhost:4000/Profile", {
-          withCredentials: true,
-        });
-        setResponse(data);
-        setFormData({
-          fname: data[0]?.fname,
-          lname: data[0]?.lname,
-          email: data[0]?.email,
-          user: data[0]?.user,
-          phone: data[0]?.phone,
-          password: "",
-          updatePassword: "",
-        });
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
+  async function getData() {
+    try {
+      let { data } = await axios.get("http://localhost:4000/Profile", {
+        withCredentials: true,
+      });
+      setResponse(data);
+      setFormData({
+        fname: data[0]?.fname,
+        lname: data[0]?.lname,
+        email: data[0]?.email,
+        user: data[0]?.user,
+        phone: data[0]?.phone,
+        password: "",
+        updatePassword: "",
+      });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
     }
+  }
+  useEffect(() => {
     getData();
   }, []);
   //update function
@@ -67,9 +67,9 @@ const Profile = () => {
         formData,
         { withCredentials: true }
       );
-      if (data) {
         toast.success(data.message);
-      }
+         getData();
+         onClose();
     } catch (error) {
       console.log(error)
       toast.error(error.response.data.message);
@@ -84,7 +84,7 @@ const Profile = () => {
   return (
     <>
       {isLoggin === true ? (
-        <div className="w-full h-auto flex flex-col md:flex-row px-10 sm:gap-2 md:gap-20 ">
+        <div className="w-full h-auto flex flex-col md:flex-row md:px-10 sm:gap-2 md:gap-20 ">
           <ProfieNavigation />
           <Card maxW="400px" my="40px" mx={{ base: "auto", md: "0px" }}>
             {/* update modal */}

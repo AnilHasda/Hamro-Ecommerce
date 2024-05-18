@@ -27,7 +27,7 @@ const Header = () => {
   let productItems = useSelector((state) => state.filterResponseData);
   let isAdmin = useSelector((state) => state.isAdmin.status);
   let isLoggin = useSelector((state) => state.isLogged.status);
-  console.log({ isLoggin });
+  let user=useSelector(state=>state.user);
   let dispatch = useDispatch();
   //variables for user section
   const searchFunction = (key) => {
@@ -61,7 +61,7 @@ const Header = () => {
     <div className="h-[80px] w-full bg-[rgb(242,117,64)] opacity-100 z-10 sticky top-0 left-0 text-white flex justify-between items-center px-[10px] sm:px[30px] md:px-16 mb-[1px]">
       <div className="flex gap-5">
         <IoCartOutline size={30} />
-        <h3 className="hidden sm:block sm:text-md md:text-xl font-semibold">
+        <h3 className={`${(location.pathname === "/" || location.pathname==="/addToCart") ? "hidden" :"block"} sm:text-md md:text-xl font-semibold`}>
           Hamro E-commerce
         </h3>
       </div>
@@ -105,7 +105,7 @@ const Header = () => {
               <div className="dropdown">
                 <div className="dropbtn flex gap-1 ">
                   <IoPersonSharp className="mt-[2px]" />
-                  {document.cookie.split("=")[1]}
+                  {user}
                   <IoMdArrowDropdown
                     size="20px"
                     className="relative left-[-4px] top-1"

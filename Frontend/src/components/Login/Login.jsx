@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-// import { updateLogged } from "../../Redux/Slices/Slices";
+import { getUser } from "../../Redux/Slices/Slices";
 import toast from "react-hot-toast";
 import axios from "axios";
 import GetData from "../getData/getdata";
@@ -23,7 +23,7 @@ import {
 const Login=()=>{
   let [user, setUser] = useState("");
     let [password, setPassword] = useState("");
-    //  let dispatch = useDispatch();
+     let dispatch = useDispatch();
      let logginStatus=useSelector(state=>state.isLogged.status);
      let adminStatus=useSelector(state=>state.isAdmin.status);
      console.log({logginStatus,adminStatus})
@@ -39,8 +39,8 @@ const Login=()=>{
         setPassword("");
         if (response.data.isLogged === true) {
           fetchLoggedInfo();
+          dispatch(getUser(user))
           toast.success(response.data.message);
-          document.cookie=`user=${user}`;
           // dispatch(updateLogged({isLogged:response.data.isLogged,isAdmin:response.data.isAdmin}));
           onClose();
         }

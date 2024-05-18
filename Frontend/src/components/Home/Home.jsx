@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Spinner } from "@chakra-ui/react";
-import GetData from "../getData/getdata";
 import { useDispatch, useSelector } from "react-redux";
 import { Select } from "@chakra-ui/react";
 import { getData, loadingStatus, updateCart } from "../../Redux/Slices/Slices";
@@ -8,7 +7,6 @@ import axios from "axios";
 import { useContextData } from "../../addtocartContextApi/Context/createContext";
 import toast from "react-hot-toast";
 const Home = () => {
-  let [quantity, setQunatity] = useState(1);
   let [heading, setHeading] = useState("OUR PRODUCTS");
   let [pageNumber, setPageNumber] = useState(1);
   let [selectPrice, setSelectPrice] = useState("");
@@ -21,7 +19,6 @@ const Home = () => {
 
   let priceSort = useSelector((state) => state.priceRange);
   let maxNumber = 8;
-  GetData();
   //calling api to get all the data from database
   const filter = async (filterItem) => {
     try {

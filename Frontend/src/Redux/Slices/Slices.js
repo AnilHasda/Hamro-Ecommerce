@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 let initialState = {
   isLogged: { status: false },
   isAdmin: { status: false },
+   user:"",
   //this variable store the response data coming from database
   responseData: [],
   //instance of responseData for search operation
@@ -52,6 +53,9 @@ let slice1 = createSlice({
     addCategory: (state, action) => {
       state.category = action.payload;
     },
+    getUser:(state,action)=>{
+state.user=action.payload;
+    }
   },
 });
 export let {
@@ -61,6 +65,7 @@ export let {
   updateCart,
   filterData,
   addCategory,
-  logOut
+  logOut,
+  getUser,
 } = slice1.actions;
 export default slice1.reducer;
