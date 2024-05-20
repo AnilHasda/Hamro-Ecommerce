@@ -13,6 +13,9 @@ const duplicateErrorHandling=(error,resp)=>{
     if (error.code === 11000 && error.keyPattern.email) {
         resp.status(500).json({message:`email  ${error.keyValue.email} already exist`});
       }
+      else if (error.code === 11000 && error.keyPattern.phone) {
+        resp.status(500).json({message:`Phone  ${error.keyValue.phone} already exist`});
+      }
        else if (error.code === 11000 && error.keyPattern.user) {
         resp.status(500).json({message:`username ${error.keyValue.user} already exist`});
       }

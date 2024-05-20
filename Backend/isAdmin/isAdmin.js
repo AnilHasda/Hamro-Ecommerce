@@ -5,12 +5,12 @@ export const isAdmin=async (req,resp)=>{
     if(checkAdmin.length>0){
         let token=req.cookies.token;
         let decode=jwt.decode(token);
-        let userCheck=checkAdmin.filter(ele=>req.body.user || decode.user ===ele.user);
+        let userCheck=checkAdmin.filter(ele=>req.body.user || decode?.user ===ele?.user);
         if(userCheck.length>0){
-        return resp.status(200).json({message:"user logged in admin",isLogged:true,isAdmin:true})
+        return resp.status(200).json({message:"Admin logged in",user:decode?.user,isLogged:true,isAdmin:true})
         }
         else{
-           return resp.status(200).json({message:"user logged in",isLogged:true,isAdmin:false})
+           return resp.status(200).json({message:"user logged in",user:decode?.user,isLogged:true,isAdmin:false})
         }
     }
     }

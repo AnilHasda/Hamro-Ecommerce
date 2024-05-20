@@ -2,26 +2,18 @@ import mongoose from "mongoose";
 import { orderModel } from "../../Database/orderDatabase/orderModel/orderModel.js";
 import { ObjectId } from "mongodb";
 import { orderSchema } from "../../Database/orderDatabase/orderSchema/orderSchema.js";
-const getOrder = async (req, resp) => {
+const placeMultipleOrder = async (req, resp) => {
   console.log(req.body);
-  const { userId, productId, quantity, price } = req.body;
-
+  const { userId, productData } = req.body;
+let {productId,quantity}=productData;
   try {
     const query = new orderModel({
       user: userId,
-      product: productId,
-      quantity: quantity,
-      price: price,
+      product:productData.map(product=>({_id:productId,quantity:quantity,Amount:price})),
+      TotalAmount: 0,
     });
     const result = await query.save();
-
-    // Find the order by its ID and populate the user and product fields
-    const finalResult = await orderModel
-      .findById(result._id)
-      .populate("user")
-      .populate("product")
-      .exec();
-    if (finalResult) {
+    if (result.length>0) {
       console.log("success");
       resp
         .status(200)
@@ -35,6 +27,30 @@ const getOrder = async (req, resp) => {
     resp.status(500).json({ message: "Internal server error", error });
   }
 };
+// controller for single order
+const placeSingleOrder=async (req,resp)=>{
+  let {userId,productId,quantity,price}=req.body;
+  try {
+    const query = new orderModel({
+      user: userId,
+      product:[{_id:productId,quantity:quantity,Amount:price}],
+      TotalAmount: price,
+    });
+    const result = await query.save();
+    if (result) {
+      console.log("success");
+      resp
+        .status(200)
+        .json({ message: "Your order has been created", order:result});
+    } else {
+      console.log("wrong");
+      resp.status(500).json({ message: "Something went wrong!" });
+    }
+  } catch (error) {
+    console.log(error);
+    resp.status(500).json({ message: "Internal server error", error });
+  }
+}
 // this controller is for admin he can update status
 const updateOrder = async (req, resp) => {
     console.log(req.body.status);
@@ -57,11 +73,12 @@ const updateOrder = async (req, resp) => {
 const userOrder = async (req, resp) => {
 console.log(req.params.id);
   try {
-    let response = await orderModel.find({user:req.params.id}).populate("user").populate("product").exec();
+    let response = await orderModel.find({user:req.params.id}).populate("user").populate("product._id").exec();
     if (response) {
       resp.status(200).json(response);
     }
   } catch (error) {
+    console.log(error);
     resp.status(500).json({ message: "Internal server error" ,error});
   }
 };
@@ -81,4 +98,4 @@ const getEnum=(req,resp)=>{
   let statusValues=orderSchema.path("status").enumValues;
   resp.status(200).json(statusValues);
 }
-export { getOrder, updateOrder, userOrder,getPendingOrder,getEnum };
+export { placeSingleOrder,placeMultipleOrder, updateOrder, userOrder,getPendingOrder,getEnum };
