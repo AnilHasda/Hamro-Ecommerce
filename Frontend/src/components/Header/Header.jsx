@@ -132,6 +132,7 @@ const Header = () => {
             <SignUp />
           </>
         )}
+        {isAdmin===false &&
         <NavLink
           to="/addToCart"
           className={`${isLoggin && "translate-y-[10px]"} relative`}
@@ -141,6 +142,7 @@ const Header = () => {
             {cartData ? cartData.length : 0}
           </div>
         </NavLink>
+}
       </div>
     </div>
   );

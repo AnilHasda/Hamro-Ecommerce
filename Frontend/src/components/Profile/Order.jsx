@@ -103,6 +103,7 @@ getPendingOrder();
                       <td>Image</td>
                       <td>Name</td>
                       <td>Price</td>
+                      <td>Quantity</td>
                       <td>Status</td>
                       <td>Time of Order</td>
                     </tr>
@@ -115,14 +116,15 @@ getPendingOrder();
                           <td>
                             <img
                               src={
-                                "http://localhost:4000/" + ele?.product[0]?.item
+                                "http://localhost:4000/" + ele?.product[0]._id.item
                               }
-                              alt={ele?.product[0]?.name}
+                              alt={ele?.product[0]?._id.name}
                               className="w-[50px]"
                             />
                           </td>
-                          <td>{ele?.product[0]?.name}</td>
-                          <td>{ele?.price}</td>
+                          <td>{ele?.product[0]?._id.name}</td>
+                          <td>{ele?.product[0].Amount}</td>
+                          <td>{ele?.product[0].quantity}</td>
                           <td>{ele?.status}</td>
                           <td>{ele?.createdAt}</td>
                         </tr>

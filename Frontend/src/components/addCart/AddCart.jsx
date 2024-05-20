@@ -43,6 +43,7 @@ const AddCart = () => {
     if (name === "selectAll") {
       let updateCheck = cartData.map((ele) => ({ ...ele, isChecked: checked }));
       setCheckbox(updateCheck);
+      console.log(checkbox);
     } else {
       let updateCheck = checkbox.map((ele, index) =>
         ele.name + index === name ? { ...ele, isChecked: checked } : ele
@@ -91,13 +92,12 @@ const AddCart = () => {
         alert("You can decrease quantity lower than 1 ! Thank You!");
       }
     }
-    console.log(updateData)
     setCheckbox(updateData);
     totalPriceCalculation();
     getData();
   }
   // function to make order
-  async function placeOrder(productId,quantity,price) {
+  async function placeSingleOrder(productId,quantity,price) {
     let userId;
     try {
       let { data } = await axios.get("http://localhost:4000/Profile", {
@@ -109,7 +109,7 @@ const AddCart = () => {
     }
     try {
       let { data } = await axios.post(
-        "http://localhost:4000/Profile/PlaceOrder",
+        "http://localhost:4000/Profile/placeSingleOrder",
         { userId:userId,productId:productId,quantity:quantity,price:price },
         { withCredentials: true }
       );
@@ -258,7 +258,7 @@ const AddCart = () => {
                           h={35}
                           colorScheme="blue"
                           fontSize="small"
-                          onClick={()=>{placeOrder(ele.id,ele.quantity,ele.price)}}
+                          onClick={()=>{placeSingleOrder(ele.id,ele.quantity,ele.price)}}
                         >
                           Order
                         </Button>
@@ -281,7 +281,7 @@ const AddCart = () => {
             );
           })}
         </div>
-        <CartSummary price={totalPrice} />
+        <CartSummary data={{totalPrice,checkbox}} />
       </div>
     ) : (
       <p className="font-bold text-center pt-4">
