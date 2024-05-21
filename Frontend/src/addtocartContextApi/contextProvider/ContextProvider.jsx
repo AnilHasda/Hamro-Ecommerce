@@ -45,11 +45,18 @@ const ContextProvider = ({ children }) => {
     let data = cartData.filter((ele) => ele.id !== id);
     setCartData(data);
       localStorage.setItem("cartData", JSON.stringify(data));
-     getData()
+     getData();
+  }
+  // remove selected items
+  function removeSelectedItem(ids){
+    let data=cartData.filter(ele=>!ids.includes(ele.id));
+    setCartData(data);
+    localStorage.setItem("cartData",JSON.stringify(data));
+    getData();
   }
   return (
     <ContextData.Provider
-      value={{ cartData,setCartData,addToCart, getData, removeAll, removeLocal }}
+      value={{ cartData,setCartData,addToCart, getData, removeAll, removeLocal,removeSelectedItem }}
     >
       {children}
     </ContextData.Provider>

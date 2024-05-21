@@ -21,7 +21,7 @@ const AddCart = () => {
   // state for checkbox
   // state for handling inputs data
   let [inputs, setInputs] = useState({});
-  let { cartData, removeAll, removeLocal, setCartData,removeSelected, getData } =
+  let { cartData, removeAll, removeLocal, setCartData,removeSelectedItem, getData } =
     useContextData();
     let [checkbox, setCheckbox] = useState([]);
   let isLoggin = useSelector((state) => state.isLogged.status);
@@ -154,9 +154,8 @@ const AddCart = () => {
       );
       if (data) {
         toast.success(data.message)
-   for (let x of productData){
-    removeLocal(x.id);
-   }
+   let ids=productData.map(ele=>ele.id);
+   removeSelectedItem(ids);
       }
     } catch (error) {
       console.log(error);
