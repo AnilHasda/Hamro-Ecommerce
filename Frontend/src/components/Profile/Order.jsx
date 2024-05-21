@@ -32,7 +32,7 @@ const Order = () => {
           withCredentials: true,
         }
       );
-      console.log(data);
+      console.log({data});
       setOrderData(data);
     } catch (error) {
       console.log(error);
@@ -46,7 +46,7 @@ const Order = () => {
         { withCredentials: true }
       );
       setPendingOrders(data);
-      console.log(data);
+      console.log({getPendingData:data});
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -105,29 +105,34 @@ getPendingOrder();
                       <td>Price</td>
                       <td>Quantity</td>
                       <td>Status</td>
+                      <td>Total Amount</td>
                       <td>Time of Order</td>
                     </tr>
                   </thead>
                   <tbody>
                     {orderData.map((ele, index) => {
                       return (
-                        <tr key={ele._id} className="px-4 h-10">
-                          <td>{index + 1}</td>
-                          <td>
-                            <img
-                              src={
-                                "http://localhost:4000/" + ele?.product[0]._id.item
-                              }
-                              alt={ele?.product[0]?._id.name}
-                              className="w-[50px]"
-                            />
-                          </td>
-                          <td>{ele?.product[0]?._id.name}</td>
-                          <td>{ele?.product[0].Amount}</td>
-                          <td>{ele?.product[0].quantity}</td>
-                          <td>{ele?.status}</td>
-                          <td>{ele?.createdAt}</td>
-                        </tr>
+                       ele?.product.map((productEle,productIndex)=>{
+                        return  <tr key={productEle._id+productIndex} className="px-4 h-10">
+                        <td>{index + 1}</td>
+                        
+                        <td>
+                          <img
+                            src={
+                              "http://localhost:4000/" + productEle._id.item
+                            }
+                            alt={productEle._id.name}
+                            className="w-[50px]"
+                          />
+                        </td>
+                        <td>{productEle._id.name}</td>
+                        <td>{productEle._id.price}</td>
+                        <td>{productEle.quantity}</td>
+                        <td>{ele?.status}</td>
+                        <td>{productIndex===ele.product.length-1?ele?.TotalAmount:"-"}</td>
+                        <td>{ele?.createdAt}</td>
+                      </tr>
+                       })
                       );
                     })}
                   </tbody>
@@ -143,6 +148,7 @@ getPendingOrder();
                       <td>Item</td>
                       <td>Price</td>
                       <td>Status</td>
+                      <td>Total Amount</td>
                       <td>Location</td>
                       <td>Time of Order</td>
                     </tr>
@@ -150,31 +156,37 @@ getPendingOrder();
                   <tbody>
                     {pendingOrders.map((ele, index) => {
                       return (
-                        <tr key={ele._id} className="px-4 h-10">
+                        ele.product.map((product,proIndex)=>{
+                       return <tr key={ele._id+product._id._id} className="px-4 h-10">
                           <td>{index + 1}</td>
                           <td>
                             <img
                               src={
-                                "http://localhost:4000/" + ele?.product[0]?.item
+                                "http://localhost:4000/" +product?._id.item
                               }
-                              alt={ele?.product[0]?.name}
+                              alt={ele?.product[0]?._id.name}
                               className="w-[50px]"
                             />
                           </td>
                           <td>{ele.user.user}</td>
                           <td>{ele.user.phone}</td>
-                          <td>{ele?.product[0]?.name}</td>
-                          <td>{ele?.price}</td>
+                          <td>{product._id.name}</td>
+                          <td>{product._id.price}</td>
                           <td>
+                            {proIndex===ele.product.length-1?
                             <select onChange={(e)=>{updateOrderStatus(ele._id,e.target.value)}}>
                               {enumData?.map((ele,index)=>{
                                return <option key={index} value={ele} defaultValue={ele}>{ele}</option>
                               })}
                             </select>
+                            :"-"
+                        }
                             </td>
-                          <td>Biratnagar</td>
-                          <td>{ele?.createdAt}</td>
+                            <td>{ele.TotalAmount}</td>
+                          <td>{proIndex===ele.product.length-1?"Biratnagar":"-"}</td>
+                          <td>{proIndex===ele.product.length-1?ele?.createdAt:"-"}</td>
                         </tr>
+                        })
                       );
                     })}
                   </tbody>

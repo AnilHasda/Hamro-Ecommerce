@@ -3,7 +3,6 @@ import ContextData from "../Context/createContext";
 const ContextProvider = ({ children }) => {
   // this object stores add to cart data
   let [cartData, setCartData] = useState([]);
-  // function that dispatch data
   const getData = () => {
     let getCartData = localStorage.getItem("cartData") ? JSON.parse(localStorage.getItem("cartData")):null;
     setCartData(getCartData || []);
@@ -38,14 +37,15 @@ const ContextProvider = ({ children }) => {
     getData();
   };
   const removeAll = () => {
-    localStorage.removeItem("cartData");
-    window.location.reload();
+    localStorage.removeItem("cartData",[]);
+    getData();
   };
   // function to remove individual item from localStorage
   function removeLocal(id) {
     let data = cartData.filter((ele) => ele.id !== id);
-    localStorage.setItem("cartData", JSON.stringify(data));
-    getData();
+    setCartData(data);
+      localStorage.setItem("cartData", JSON.stringify(data));
+     getData()
   }
   return (
     <ContextData.Provider

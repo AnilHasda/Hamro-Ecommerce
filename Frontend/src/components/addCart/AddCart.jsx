@@ -17,16 +17,33 @@ import {
 const AddCart = () => {
   // select variables
   let [totalPrice, setTotalPrice] = useState(0);
+  let [userId,setUserId]=useState("");
   // state for checkbox
-  let [checkbox, setCheckbox] = useState([]);
   // state for handling inputs data
   let [inputs, setInputs] = useState({});
-  let { cartData, removeAll, removeLocal, setCartData, getData } =
+  let { cartData, removeAll, removeLocal, setCartData,removeSelected, getData } =
     useContextData();
+    let [checkbox, setCheckbox] = useState([]);
   let isLoggin = useSelector((state) => state.isLogged.status);
+  // get user id
+  async function getUserId(){
+    try {
+      let { data } = await axios.get("http://localhost:4000/Profile", {
+        withCredentials: true,
+      });
+      setUserId(data[0]._id)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(()=>{
+    getUserId();
+  },[])
   useEffect(() => {
-    setCheckbox(cartData);
-  }, []);
+    if(cartData.length>0){
+      setCheckbox(cartData.map(items=>({...items,isChecked:false})));
+    }
+  }, [cartData]);
   useEffect(() => {
     totalPriceCalculation();
   }, [checkbox, cartData]);
@@ -43,11 +60,11 @@ const AddCart = () => {
     if (name === "selectAll") {
       let updateCheck = cartData.map((ele) => ({ ...ele, isChecked: checked }));
       setCheckbox(updateCheck);
-      console.log(checkbox);
     } else {
       let updateCheck = checkbox.map((ele, index) =>
         ele.name + index === name ? { ...ele, isChecked: checked } : ele
       );
+      console.log(updateCheck);
       setCheckbox(updateCheck);
     }
   };
@@ -97,31 +114,58 @@ const AddCart = () => {
     getData();
   }
   // function to make order
-  async function placeSingleOrder(productId,quantity,price) {
-    let userId;
-    try {
-      let { data } = await axios.get("http://localhost:4000/Profile", {
-        withCredentials: true,
-      });
-      userId=data[0]._id;
-    } catch (error) {
-      console.log(error);
-    }
+  async function placeSingleOrder(productId, quantity, price) {
     try {
       let { data } = await axios.post(
         "http://localhost:4000/Profile/placeSingleOrder",
-        { userId:userId,productId:productId,quantity:quantity,price:price },
+        {
+          userId: userId,
+          productId: productId,
+          quantity: quantity,
+          price: price,
+        },
         { withCredentials: true }
       );
       if (data) {
         removeLocal(productId);
+        console.log({productId})
         toast.success(data.message);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       // toast.error(error);
-      toast.error("Failed to place order ! Try again later")
+      toast.error("Failed to place order ! Try again later");
     }
+  }
+  // function for placing multiple orders
+  const placeMultipleOrder=async ()=>{
+    console.log({multipleuserID:userId})
+    let productData=checkbox.filter(ele=>ele?.isChecked===true);
+    if(productData.length>0){
+    try {
+      let { data } = await axios.post(
+        "http://localhost:4000/Profile/placeMultipleOrder",
+        {
+          userId,
+          productData,
+          totalPrice
+        },
+        { withCredentials: true }
+      );
+      if (data) {
+        toast.success(data.message)
+   for (let x of productData){
+    removeLocal(x.id);
+   }
+      }
+    } catch (error) {
+      console.log(error);
+      // toast.error(error);
+      toast.error("Failed to place order ! Try again later");
+    }
+  }else{
+    toast.error("You can not place order without selecting items")
+  }
   }
   return isLoggin ? (
     cartData?.length > 0 ? (
@@ -132,7 +176,7 @@ const AddCart = () => {
               There are {cartData.length} items available in your cart!
             </h3>
           </div>
-          <div className="flex items-center gap-4 ml-10">
+          <div className="flex flex-wrap items-center gap-4 ml-10">
             <div>
               <input
                 type="checkbox"
@@ -160,6 +204,9 @@ const AddCart = () => {
             >
               Remove All
             </Button>
+            <Button colorScheme="teal" fontSize="small" h={35} onClick={placeMultipleOrder}>
+              Order Selected
+            </Button>
           </div>
           {cartData.map((ele, index) => {
             return (
@@ -183,105 +230,107 @@ const AddCart = () => {
                     alt={ele.name}
                     m={{ base: "auto", md: "0" }}
                   />
-                    <Stack py={5}>
-                      <CardBody>
-                        <Heading fontSize="lg">{ele.name}</Heading>
+                  <Stack py={5}>
+                    <CardBody>
+                      <Heading fontSize="lg">{ele.name}</Heading>
 
-                        <Text py="2" fontSize="sm">
-                          {ele.description}
+                      <Text py="2" fontSize="sm">
+                        {ele.description}
+                      </Text>
+                      <div className="flex justify-between items-center">
+                        <Text
+                          py="2"
+                          color="rgb(242,117,64)"
+                          fontWeight="semibold"
+                        >
+                          ${ele.price}
                         </Text>
-                        <div className="flex justify-between items-center">
-                          <Text
-                            py="2"
-                            color="rgb(242,117,64)"
-                            fontWeight="semibold"
-                          >
-                            ${ele.price}
-                          </Text>
-                          <div>
-                            <input
-                              type="checkbox"
-                              name={ele.name + index}
-                              id="selectOne"
-                              checked={checkbox[index]?.isChecked || false}
-                              onChange={(e) => {
-                                handleCheck(e);
-                              }}
-                            />
-                            <label htmlFor="selectOne" className="pl-1">
-                              Select
-                            </label>
-                          </div>
+                        <div>
+                          <input
+                            type="checkbox"
+                            name={ele.name + index}
+                            id="selectOne"
+                            checked={checkbox[index]?.isChecked || false}
+                            onChange={(e) => {
+                              handleCheck(e);
+                            }}
+                          />
+                          <label htmlFor="selectOne" className="pl-1">
+                            Select
+                          </label>
                         </div>
-                        <div className="flex gap-2 mt-2">
-                          <Text
-                            py="2"
-                            color="rgb(242,117,64)"
-                            fontWeight="semibold"
+                      </div>
+                      <div className="flex gap-2 mt-2">
+                        <Text
+                          py="2"
+                          color="rgb(242,117,64)"
+                          fontWeight="semibold"
+                        >
+                          quantity:
+                        </Text>
+                        <div className="flex items-center gap-3">
+                          <button
+                            className="text-[30px]"
+                            onClick={() => {
+                              changeQuantity(ele.id, "decrement");
+                            }}
                           >
-                            quantity:
-                          </Text>
-                          <div className="flex items-center gap-3">
-                            <button
-                              className="text-[30px]"
-                              onClick={() => {
-                                changeQuantity(ele.id, "decrement");
-                              }}
-                            >
-                              -
-                            </button>
-                            <input
-                              type="number"
-                              name={ele.name}
-                              min={1}
-                              max={10}
-                              value={ele.quantity}
-                              className="bg-[#e2dada] outline-none h-8 w-10 text-center"
-                              readOnly
-                              onChange={handleChange}
-                            />
-                            <button
-                              className="text-[30px]"
-                              onClick={() => {
-                                changeQuantity(ele.id, "increment");
-                              }}
-                            >
-                              +
-                            </button>
-                          </div>
+                            -
+                          </button>
+                          <input
+                            type="number"
+                            name={ele.name}
+                            min={1}
+                            max={10}
+                            value={ele.quantity}
+                            className="bg-[#e2dada] outline-none h-8 w-10 text-center"
+                            readOnly
+                            onChange={handleChange}
+                          />
+                          <button
+                            className="text-[30px]"
+                            onClick={() => {
+                              changeQuantity(ele.id, "increment");
+                            }}
+                          >
+                            +
+                          </button>
                         </div>
-                      </CardBody>
+                      </div>
+                    </CardBody>
 
-                      <CardFooter pb={5}>
-                        <Button
-                          variant="solid"
-                          h={35}
-                          colorScheme="blue"
-                          fontSize="small"
-                          onClick={()=>{placeSingleOrder(ele.id,ele.quantity,ele.price)}}
-                        >
-                          Order
-                        </Button>
-                        <Button
-                          variant="solid"
-                          h={35}
-                          colorScheme="red"
-                          ml={5}
-                          fontSize="small"
-                          onClick={() => {
-                            removeLocal(ele.id);
-                          }}
-                        >
-                          Remove
-                        </Button>
-                      </CardFooter>
-                    </Stack>
+                    <CardFooter pb={5}>
+                      <Button
+                        variant="solid"
+                        h={35}
+                        colorScheme="blue"
+                        fontSize="small"
+                        onClick={() => {
+                          placeSingleOrder(ele.id, ele.quantity, ele.price);
+                        }}
+                      >
+                        Order
+                      </Button>
+                      <Button
+                        variant="solid"
+                        h={35}
+                        colorScheme="red"
+                        ml={5}
+                        fontSize="small"
+                        onClick={() => {
+                          removeLocal(ele.id);
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </CardFooter>
+                  </Stack>
                 </Card>
               </div>
             );
           })}
         </div>
-        <CartSummary data={{totalPrice,checkbox}} />
+        <CartSummary data={{ totalPrice, checkbox }} />
       </div>
     ) : (
       <p className="font-bold text-center pt-4">
