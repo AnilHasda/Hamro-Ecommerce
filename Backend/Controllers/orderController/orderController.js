@@ -4,20 +4,19 @@ import { ObjectId } from "mongodb";
 import { orderSchema } from "../../Database/orderDatabase/orderSchema/orderSchema.js";
 const placeMultipleOrder = async (req, resp) => {
   console.log(req.body);
-  const { userId, productData } = req.body;
-let {productId,quantity}=productData;
+  const { userId, productData,totalPrice } = req.body;
+  console.log({userId})
   try {
     const query = new orderModel({
       user: userId,
-      product:productData.map(product=>({_id:productId,quantity:quantity,Amount:price})),
-      TotalAmount: 0,
+      product:productData.map(product=>({_id:product.id,quantity:product.quantity,Amount:product.price})),
+      TotalAmount: totalPrice,
     });
     const result = await query.save();
-    if (result.length>0) {
-      console.log("success");
+    if (result) {
       resp
         .status(200)
-        .json({ message: "Your order has been created", order: finalResult });
+        .json({ message: "Your order has been created", order: result });
     } else {
       console.log("wrong");
       resp.status(500).json({ message: "Something went wrong!" });
@@ -85,7 +84,7 @@ console.log(req.params.id);
 // get all pending records from user this is for admin 
 const getPendingOrder=async (req,resp)=>{
   try {
-    let response = await orderModel.find({status:"Pending"}).populate("user").populate("product").exec();
+    let response = await orderModel.find({status:"Pending"}).populate("user").populate("product._id").exec();
     if (response) {
       resp.status(200).json(response);
     }

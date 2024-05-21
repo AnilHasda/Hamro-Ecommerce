@@ -1,7 +1,8 @@
 import express from "express";
 const router=express.Router();
-import { placeSingleOrder,updateOrder,userOrder,getPendingOrder,getEnum } from "../../Controllers/orderController/orderController.js";
+import { placeSingleOrder,placeMultipleOrder,updateOrder,userOrder,getPendingOrder,getEnum } from "../../Controllers/orderController/orderController.js";
 router.post("/Profile/placeSingleOrder",placeSingleOrder);
+router.post("/Profile/placeMultipleOrder",placeMultipleOrder);
 router.put("/Admin/Profile/updateOrder/:id",updateOrder);
 router.get("/Profile/userOrder/:id",userOrder);
 router.get("/Admin/Profile/PendingOrder",getPendingOrder);
