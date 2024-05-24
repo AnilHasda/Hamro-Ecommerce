@@ -10,7 +10,7 @@ const Order = () => {
   //function for retrieving user data
   let isLogged = useSelector((state) => state.isLogged.status);
   let isAdmin = useSelector((state) => state.isAdmin.status);
-  console.log({ loggedinfo: isLogged, isAdminstatus: isAdmin });
+  // console.log({ loggedinfo: isLogged, isAdminstatus: isAdmin });
   let userId;
   async function userData() {
     try {
@@ -32,7 +32,7 @@ const Order = () => {
           withCredentials: true,
         }
       );
-      console.log({data});
+      // console.log({data});
       setOrderData(data);
     } catch (error) {
       console.log(error);
@@ -46,7 +46,7 @@ const Order = () => {
         { withCredentials: true }
       );
       setPendingOrders(data);
-      console.log({getPendingData:data});
+      // console.log({getPendingData:data});
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -60,7 +60,7 @@ const Order = () => {
         { withCredentials: true }
       );
       setEnumData(response?.data);
-      console.log({enumdatas:response.data});
+      // console.log({enumdatas:response.data});
     } catch (error) {
       console.log(error);
     }
@@ -77,7 +77,6 @@ getPendingOrder();
   }
   useEffect(() => {
     if (isAdmin === false) {
-      console.log("function is called ");
       userData();
     } else {
       getPendingOrder();

@@ -39,7 +39,7 @@ const GetData = () => {
         { withCredentials: true }
       );
       if (loggedInfo?.data) {
-        console.log(loggedInfo);
+      //   console.log(loggedInfo);
         dispatch(getUser(loggedInfo.data.user));
         dispatch(
           updateLogged({

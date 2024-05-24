@@ -28,7 +28,7 @@ const Header = () => {
   let isAdmin = useSelector((state) => state.isAdmin.status);
   let isLoggin = useSelector((state) => state.isLogged.status);
   let user=useSelector(state=>state.user);
-  console.log(user)
+  // console.log(user)
   let dispatch = useDispatch();
 
   const searchFunction = (key) => {
@@ -38,7 +38,7 @@ const Header = () => {
       return item.includes(key) || descr.includes(key);
     });
     dispatch(getData(filterData));
-    console.log(filterData);
+    // console.log(filterData);
   };
   // logout function
   const getLogOut = async () => {
@@ -47,7 +47,7 @@ const Header = () => {
         withCredentials: true,
       });
       if (data?.message) {
-        console.log(data);
+        // console.log(data);
         toast.success(data.message);
         dispatch(logOut({ isLogged: data.isLogged, isAdmin: data.isAdmin }));
       }

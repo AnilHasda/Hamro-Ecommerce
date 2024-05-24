@@ -50,7 +50,7 @@ const Profile = () => {
         password: "",
         updatePassword: "",
       });
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -79,7 +79,7 @@ const Profile = () => {
   function handleChange(e) {
     let { name, value } = e.target;
     setFormData((prev) => (prev = { ...prev, [name]: value }));
-    console.log(formData);
+    // console.log(formData);
   }
   return (
     <>

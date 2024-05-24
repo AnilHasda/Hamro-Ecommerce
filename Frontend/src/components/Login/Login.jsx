@@ -26,7 +26,7 @@ const Login=()=>{
      let dispatch = useDispatch();
      let logginStatus=useSelector(state=>state.isLogged.status);
      let adminStatus=useSelector(state=>state.isAdmin.status);
-     console.log({logginStatus,adminStatus})
+    //  console.log({logginStatus,adminStatus})
      let {fetchLoggedInfo}=GetData();
     const loginData = async (e) => {
       e.preventDefault();

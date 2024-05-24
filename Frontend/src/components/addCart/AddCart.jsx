@@ -33,7 +33,7 @@ const AddCart = () => {
       });
       setUserId(data[0]._id)
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
   useEffect(()=>{
@@ -64,7 +64,7 @@ const AddCart = () => {
       let updateCheck = checkbox.map((ele, index) =>
         ele.name + index === name ? { ...ele, isChecked: checked } : ele
       );
-      console.log(updateCheck);
+      // console.log(updateCheck);
       setCheckbox(updateCheck);
     }
   };
@@ -76,7 +76,7 @@ const AddCart = () => {
         return acc;
       }, 0);
     setTotalPrice(total);
-    console.log(total);
+    // console.log(total);
   };
 
   function changeQuantity(id, operation) {
@@ -128,7 +128,7 @@ const AddCart = () => {
       );
       if (data) {
         removeLocal(productId);
-        console.log({productId})
+        // console.log({productId})
         toast.success(data.message);
       }
     } catch (error) {
